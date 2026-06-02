@@ -1,0 +1,11 @@
+{
+  "model": "opus",
+  "permissions": {
+    "defaultMode": "plan"
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "allowUnsandboxedCommands": false
+  }
+}
