@@ -9,7 +9,8 @@ See README.md for an overview of the project
 - **Constants**: Define thresholds and parameters as named constants
 - **Documentation**: When the purpose of code is not easy to determine, document it. First try to make the purpose easier to understand.
 - **Tracing**: Add lots of debug level logging statements. Programs should be able to set the log level via an environment variable or CLI. Info level statements should show what is happening in the program at a high level.
-- **Error Handling**: Do not ignore errors. An error should be passed up callers until it reaches an error handler that properly handles the error by terminating the program in an exit state, returning an HTTP error code, etc.
+- **Error Handling**: Handle all error and edge cases. Do not ignore errors. An error should be passed up callers until it reaches an error handler that properly handles the error by terminating the program in an exit state, returning an HTTP error code, etc.
+- **Careful State Transitions**: All state transitions must be explicitly handled with proper validation.
 
 # Workflow
 - Planning
