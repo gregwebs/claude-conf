@@ -35,6 +35,7 @@ See README.md for an overview of the project
     * Update technical documentation
     * Add state change diagrams to documentation
     * Create any new documentation files that are needed
+    * Put information from this change into a file in ./docs/change
 - Code review
   * Have engineeering-lead do a code review before verification
     * Do a follow up review of the changes made during verification
