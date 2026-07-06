@@ -39,3 +39,13 @@ Agents are perfectly happy to implement linting, ci, e2e tests, etc if you direc
 Depending on the project, it can be expensive to have an agent work with e2e tests.
 It is usually best to focus on other forms of quality assurance to catch most issues and to use e2e as a lighter final layer.
 If there is no e2e test written we can still ask the agent for some kind of ad-hoc verication.
+
+## Security
+
+### Github
+
+If you are going to give the agent autonomy to interact with Github, it is better that it doesn't actually appear to be you and that permissions are restricted as much as possible.
+If you use the Claude Github app, the interaction will appear to be directly from you and you cannot alter the permissions, only the repos that it has access to.
+
+There is a skill github-app in this repo to help the agent authenticate as Github application rather than as you.
+This will not work on Claude Code for the Web (cloud) because they block Github requests- you would need to use the Claude Github app there to send a PR or teleport it back to your local Claude first.
