@@ -22,3 +22,20 @@ But maybe we can figure out how to layer that on top.
 CLAUDE.md has @AGENTS.md at the top- that will include the contents of AGENTS.md into CLAUDE.md
 
 If you are all in on Claude just use AGENTS.md as your CLAUDE.md
+
+## Your workflow
+
+Start by using plan mode! Use the best model you can for planning (Opus/Fable or equivalent).
+For implementation, use Sonnet. For a final code review, use the best model you can. 
+
+It is up to you how much you want to get involved- thoroughly review all changes or commit things vibe-coded.
+In either case the goal is that the agent is producing the best possible output.
+
+## Engineering discipline
+
+The key to letting agents do more work for you is increaseing the engineering discipline.
+Agents are perfectly happy to implement linting, ci, e2e tests, etc if you direct them to.
+
+Depending on the project, it can be expensive to have an agent work with e2e tests.
+It is usually best to focus on other forms of quality assurance to catch most issues and to use e2e as a lighter final layer.
+If there is no e2e test written we can still ask the agent for some kind of ad-hoc verication.
