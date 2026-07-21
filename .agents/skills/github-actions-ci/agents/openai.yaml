@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Actions CI"
+  short_description: "Monitor and diagnose repository CI checks"
+  default_prompt: "Use $github-actions-ci to monitor the current commit CI and investigate any failures."

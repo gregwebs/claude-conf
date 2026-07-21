@@ -1,0 +1,5 @@
+interface:
+  display_name: "Breakdown"
+  short_description: "Break down work into tracer-bullet tickets"
+policy:
+  allow_implicit_invocation: false
