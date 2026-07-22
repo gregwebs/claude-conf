@@ -2,14 +2,31 @@ AI configuration files to help produce high quality code.
 
 ## Goal
 
-The main goal is to increase quality by
-* outlining a workflow that emphasizes specing, planning, testing, and verification
-* having a separate agent review every stage
+* Increase Agent code quality (fewer defects, stronger code base)
+* Decrease user overview
 
-With quality increased, that allows the agent to do more hands off work for you.
+These are achieved by:
+* outlining a workflow that emphasizes specing, planning, testing, and verification
+* having a separate agent review at every stage
+
+Requirements from you
+* You have to get deeply involved with the planning stage
+* Spend effort on engineering discipline
+
+Possible Downsides
+* It may take significantly longer to complete a feature
+* Cost to initially complete a feature
+  * but for a non-prototype you will save due to
+    * fewer defects
+    * a more agile code base
+
+
+As code quality increases, the agent can do more hands off work for you.
 The goal is to allow the agents to do as much work for you as you are comfortable with.
 This configuration pushes things towards a large investment in alignment via grill-with-docs (give this a try, its amazing!) and then optional involvement after that point.
-Pull Requests are created that you approve and merge.
+Pull Requests are created that you approve and merge- how closely you review them is up to you.
+
+## Model selection
 
 The .claude/settings.local.json sets the default mode to opusplan.
 (Opus) Plan mode is cost effective because it switches betweeen Opus for planning and Sonnet for implementation.
@@ -20,7 +37,7 @@ The workflows and configuration here do not otherwise help with managing which m
 ## Implementation
 
 These files are designed to be generic with respect to programming language and project.
-Most of what exists in AGENTS.md is gradually moving into skills because skills are composeable.
+Most of what exists in AGENTS.md is gradually moving into skills because they are composeable.
 
 ### Base
 
@@ -36,7 +53,7 @@ This repo does just that.
 If you install mattpocock/skills local to your project then you will need to rename the skills from this repo that are overriding mattpocock/skills.
 
 
-## CLAUDE.md vs AGENTS.md
+### CLAUDE.md vs AGENTS.md
 
 CLAUDE.md has @AGENTS.md at the top- that will include the contents of AGENTS.md into CLAUDE.md
 
