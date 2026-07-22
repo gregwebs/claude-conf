@@ -1,7 +1,7 @@
 {
   "model": "opus",
   "permissions": {
-    "defaultMode": "plan"
+    "defaultMode": "opusplan"
   },
   "sandbox": {
     "enabled": true,

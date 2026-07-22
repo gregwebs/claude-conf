@@ -6,8 +6,8 @@ The main goal is to increase quality by
 * outlining a workflow that emphasizes specing, planning, testing, and verification
 * having a separate agent review every stage
 
-The .claude/settings.local.json sets the default mode to plan.
-Plan mode is cost effective because it switches betweeen Opus for planning and Sonnet for implementation.
+The .claude/settings.local.json sets the default mode to opusplan.
+(Opus) Plan mode is cost effective because it switches betweeen Opus for planning and Sonnet for implementation.
 This will require an explicit approval to move between planning and implementing.
 
 The workflows and configuration here do not otherwise help with managing which model you use.
