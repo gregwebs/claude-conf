@@ -1,22 +1,34 @@
 ---
 name: implement
 description: "Implement a piece of work based on a spec or set of tickets."
-disable-model-invocation: true
 ---
 
 # Overview
 
-The following is similar to the /implement personal skill but ensures
+The following is based off of mattpocock:implement for
+* agent delegation
 * a thorough planning phase at the beginning
-* a Pull Request at the end
+* a commit at the end
+
+# Agent Delegation
+
+If agent delegation is unavailable, say so and prompt the user to select the apropriate model for the phase.
 
 # Flow
 
-Use /implementation-plan to generate a detailed Implementation Plan.
-The user does not need to approve the plan if it was approved via /code-review.
-After the plan is approved, exit /plan mode and use an efficient coding model.
+## Phase 1 - A good plan
 
-Implement the work described by the Implementation Plan.
+Delegate this phase to the `planner` subagent to plan: $ARGUMENTS.
+
+Use /implementation-plan to generate a detailed **Implementation Plan**.
+
+## Phase 2 - Plan execution
+
+Pass Phase 1's output **verbatim** in the delegation prompt to the
+`implementer` subagent. Do not implement inline — that would run execution on the planning model.
+
+Implement the **Implementation Plan** as written. Do not redesign it.
+Ask for user approval to deviate from the plan or alter it.
 
 Use /tdd where possible, at pre-agreed seams.
 
@@ -24,4 +36,6 @@ Run typechecking regularly, single test files regularly, and the full test suite
 
 Once done, use /code-review to review the work.
 
-Commit your work and send a Pull Request.
+## Phase 3 - completion
+
+Commit your work.

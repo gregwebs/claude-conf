@@ -5,29 +5,32 @@ description: Perform a Code Review. Use when the user wants to review a branch, 
 
 # /code-review - project wrapper
 
-This project shadows the personal `code-review` skill so that:
+This project shadows the base `code-review` skill so that:
 * a specific persona is used as a subagent
 * claude invokes codex if it is available
 * an adversarial review is peformed for initial code review for initial code review
 
 ## Delegate
 
-Read `~/.agents/skills/code-review/SKILL.md`, the base skill's canonical path.
+Read `./base/SKILL.md`, the base skill's canonical path.
 Code review should closely follow the procedures outlined here.
 
 If that base file does not exist on this machine, stop and tell the user the
-personal `code-review` skill is missing. This wrapper intentionally depends on
-the personal skill instead of vendoring its process.
-
-## Adeversarial Review
-
-The first code review should be adversarial. Follow up reviews of changes made based off of the adversarial review should be non-adversarial.
+base `code-review` skill is missing and they should symlink to a base code-review skill.
 
 ## Agent Code Review
 
 * Use a subagent for code review.
 * Use the engineering-lead persona defined in `.claude/agents/engineering-lead.md`.
 * A different agent persona can be used if specified when the skill is invoked.
+
+## Adversarial Review
+
+The first code review should be adversarial. Follow up reviews of changes made based off of the adversarial review should be non-adversarial.
+
+Only ask the user to resolve review issues if
+* resolution would alter the plan/spec.
+* the agents disagree on significantly different approaches (for a similar approaches choose one)
 
 ## Claud Prefers Codex
 
@@ -44,18 +47,10 @@ node $HOME/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companio
 
 If the code is already committed, add: `--base main`
 
-#### Plan/spec review
-
 Pass the plan/spec as `--prompt-file`, starting with "Review the following plan/spec".
-Use instructions from the `codex:adversarial-review` skill (or `codex:review` for follow-ups).
-If the review suggests a significantly different approach, ask the user to choose between them and recommend one.
-
-#### Code review
-
-Pass the plan/spec for the changes as `--prompt-file`.
 If there is only a conversation to go off of, summarize it to a spec first with the /to-spec skill.
+
 Use instructions from the `codex:adversarial-review` skill (or `codex:review` for follow-ups).
-Only ask the user to resolve review issues if resolution would alter the plan/spec.
 
 ### Fallback: subagent
 
