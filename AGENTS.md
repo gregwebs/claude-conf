@@ -8,6 +8,16 @@
 
 /usr/bin/curl may have TLS issues. Use /opt/homebrew/opt/curl/bin/curl
 
+## Github
+
+If the /github-app skill is availble:
+* Use it for access to the Github repo.
+* Even if you don't need to auth, still use that skill because it allow lists scripts for the interaction patterns we used.
+
+#### Github Actions CI
+
+If the /github-actions-ci skill is available, use it for interactions with Github CI.
+
 ## Temporary file handling for Codex
 
 - `/private/tmp` is an approved writable location.
@@ -22,37 +32,41 @@
 Run approved repository scripts directly- do not prefix these commands with zsh -lc, env, PATH=..., or similar wrappers unless the command cannot run directly. Only use `/bin/zsh -lc` when shell syntax, environment assignment, or a multi-command pipeline is strictly required.
 If an environment adjustment is required, see if the shell scripts can be updated so that the adjustment is no longer needed.
 
-If you nedd to run commands that are not already approved, propose writing a script for that which can be permanently allow listed.
+Use allow listed commands from skills and settings.
 
+If commands that you run require approval, propose writing a script for that which can be permanently allow listed.
 
-## Github
-
-Use the /github-app skill for access to the Github repo.
-Even if you don't need to auth, still use that skill because it allow lists scripts for the interaction patterns we used.
-If you need to perform any operations that aren't allowed, determine how to allow list these operations in the future.
-
-#### Github Actions CI
-
-Use the /github-actions-ci skill for interactions with Github CI.
 
 # General workflow
 
-- update the local main to the latest from origin and branch from that.
-- Create an **Implementation Plan**
-- Write **Technical Documentation** for the changes
-- start **Coding**
-- Write a **Change Record**
-- Review and finalize **Technical Documentation**
-- perform an /code-review of the changes
-- perform a **Verification**
+- update the local copy to the latest from origin and use a branch
+- /implement the changes
+- Write **Documentation** for the changes
+- Perform a **Verification**
 - Send a **Pull Request**
 
 # Workflow Components
 
 ## Documentation
 
-Add state change diagrams to documentation.
+In code:
+* Don't document *what* code does. Rewrite code to make what it does self-documenting.
+* Document *why* code does what it does and alternative approaches that were purposefuly not taken.
+
+There should be one canonical place where something is documented (excluding Change Records).
 Check on references between documents.
+Remove out of date documentation.
+
+Add diagrams to documentation.
+
+### Technical documentation
+
+Update and add lasting technical documentation. It should be accessible by following links from the README.md.
+Documentation should explain things that are not readily available from reading the code, for example:
+* useful commands to run (but if they are more than a one liner codify it by addint it to the project script directory)
+* purpose and product needs
+* technical design trade offs considered (important ones belong in ./docs/adr)
+
 
 ### Change Record
 
@@ -60,18 +74,9 @@ Put information about the current changes into a Change Record in ./docs/change.
 Change Record documentation is
 * ephemeral (it might get updated by the next commit, but that's about it).
 * more verbose than other documentation (we will cull it later).
-If older Change Record are recognized as out of date, mark them as **DEPRECATED** at the top, and summarize them into a smaller document.
 
-### Technical documentation
-
-Update and add lasting technical documentation. It should be accessible by following links from the README.md.
-Documentation should explain things that are not readily available from reading the code, for example:
-* useful commands to run (but if they are more than a one liner codify it in ./scripts/)
-* purpose and product needs
-* technical design trade offs considered (important ones belong in ./docs/adr)
-
-There should be one canonical place where something is documented (excluding Change Records).
-Remove out of date documentation.
+Look at older Change Records relevant to current changes.
+If any part of a Change Record becomes out of date, mark it as **DEPRECATED** at the top, and summarize the changes into a smaller document.
 
 ## Pull Request
 
@@ -102,21 +107,6 @@ Consider whether any manual verification steps should be added as automated test
 
 Don't make any changes to data that cannot be undone.
 When updating database data, first create a backup of the existing database.
-
-## Implementation Plan
-
-Use the /implementation-plan skill (`.agents/skills/implementation-plan/SKILL.md`).
-If there is already an Implementation Plan that satisfies the skill's criteria, use it.
-
-## Coding
-
-First ensure there is **Implementation Plan**
-
-When deviating from the plan, ask for approval.
-Use /tdd to write tests first.
-test, compile/check, and lint the code frequently.
-Follow CODING_STANDARDS.md for how to write the code.
-Follow CONTRIBUTING.md for instructions on how to build and test.
 
 # Workflow entry points
 
