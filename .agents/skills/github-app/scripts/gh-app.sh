@@ -3,12 +3,14 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROGRAM_NAME="${GH_APP_PROGRAM_NAME:-$0}"
 
 usage() {
   cat <<EOF
-usage: $0 COMMAND [ARGS...]
+usage: $PROGRAM_NAME COMMAND [ARGS...]
 
 commands:
+  push            Push the current branch
   pr-create       Create a pull request
   pr-update       Update a pull request
   issue-get       Read an issue
@@ -16,15 +18,18 @@ commands:
   issue-update    Update an issue
   issue-comment   Comment on an issue or pull request
   issue-sub-add   Link a child issue to a parent
+  actions-run-view       Read workflow-run metadata
+  actions-job-log        Download a job log
+  actions-rerun-failed   Rerun failed jobs in a workflow run
 
-Run "$0 COMMAND --help" for command-specific arguments.
+Run "$PROGRAM_NAME COMMAND --help" for command-specific arguments.
 EOF
 }
 
 command_name="${1:-}"
 case "$command_name" in
   --help|-h|"") usage; exit 0 ;;
-  pr-create|pr-update|issue-get|issue-create|issue-update|issue-comment|issue-sub-add) ;;
+  push|pr-create|pr-update|issue-get|issue-create|issue-update|issue-comment|issue-sub-add|actions-run-view|actions-job-log|actions-rerun-failed) ;;
   *) echo "unknown command: $command_name" >&2; usage >&2; exit 1 ;;
 esac
 shift

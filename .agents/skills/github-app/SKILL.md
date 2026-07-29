@@ -1,6 +1,6 @@
 ---
 name: github-app
-description: Read and update GitHub issues, push branches, and create or update pull requests, issues, and comments for this repo via the App-authenticated scripts in ./scripts/. Use for GitHub reads or writes, including "open a PR", "send a pull request", "file/read/update an issue", "comment on the PR/issue", or an App-authenticated push.
+description: Read and update GitHub issues, push branches, and create or update pull requests, issues, and comments through the App-authenticated ./scripts/gh-app.sh dispatcher. Use for GitHub reads or writes, including "open a PR", "send a pull request", "file/read/update an issue", "comment on the PR/issue", or an App-authenticated push.
 user-invocable: true
 allowed-tools:
   - Read
@@ -16,9 +16,10 @@ allowed-tools:
 
 # /github-app — GitHub PR / issue / comment via the App scripts
 
-Thin wrappers in `scripts/` that hit the GitHub REST API authenticated as
-a GitHub App installation. They mint their own
-short-lived (~9 min) token per call — nothing to log into. Each script prints
+The stable `./scripts/gh-app.sh` dispatcher delegates to implementation scripts
+bundled with this skill. Those scripts hit the GitHub REST API authenticated as
+a GitHub App installation. They mint their own short-lived (~9 min) token per
+call — nothing to log into. Each script prints
 the resulting `html_url` on success; **always relay that URL back to the user.**
 
 These are **outward-facing actions** (they publish to GitHub and notify people).
@@ -29,11 +30,12 @@ Confirm the target (repo, branch, title) before running if there's any ambiguity
 
 | Action | Dispatcher command | Required args |
 |---|---|---|
-| Open a PR | `gh-app.sh pr-create` | `--base BASE --head HEAD --title TITLE` |
-| Read an issue | `gh-app.sh issue-get` | `--issue NUMBER` |
-| File an issue | `gh-app.sh issue-create` | `--title TITLE` |
-| Link sub-issue | `gh-app.sh issue-sub-add` | `--parent NUMBER --child NUMBER` |
-| Comment on issue/PR | `gh-app.sh issue-comment` | `--issue NUMBER` (PRs count as issues here) |
+| Push a branch | `./scripts/gh-app.sh push` | none |
+| Open a PR | `./scripts/gh-app.sh pr-create` | `--base BASE --head HEAD --title TITLE` |
+| Read an issue | `./scripts/gh-app.sh issue-get` | `--issue NUMBER` |
+| File an issue | `./scripts/gh-app.sh issue-create` | `--title TITLE` |
+| Link sub-issue | `./scripts/gh-app.sh issue-sub-add` | `--parent NUMBER --child NUMBER` |
+| Comment on issue/PR | `./scripts/gh-app.sh issue-comment` | `--issue NUMBER` (PRs count as issues here) |
 
 Common optional args: `--repo OWNER/REPO`, `--body TEXT`, `--body-file FILE`.
 Issue creation also takes repeatable `--label LABEL`.
@@ -102,8 +104,8 @@ Reasons:
    pushes via the same App credentials). Confirm with the user before pushing if
    they haven't asked.
 2. `--base` is usually `main`; `--head` is the current feature branch
-   (`git rev-parse --abbrev-ref HEAD`). Use plain `git push`; the configured
-   credential helper handles App authentication and curl selection.
+   (`git rev-parse --abbrev-ref HEAD`). Use `./scripts/gh-app.sh push`; its
+   bundled credential helper handles App authentication and curl selection.
 3. Per this project's CLAUDE.md workflow, the **PR description should point to
    the change's entry in `./docs/change/`** — summarize there and reference it
    in the body.
@@ -143,9 +145,9 @@ and PR/issue number** work for both:
 
 ## Setup reference
 
-All GitHub-interaction code (token minting, git credential helper, the
-gh-app-*.sh scripts, lib.sh) lives in `./scripts/` and is tracked in
-this repo. The only things that live outside the repo, in
+The public dispatcher lives at `./scripts/gh-app.sh`. GitHub-interaction
+implementation code is bundled under this skill and tracked in this repo.
+The only things that live outside the repo, in
 `~/.config/github-app/` (not tracked, `chmod 700`/`600`), are the two actual
 secrets:
 

@@ -33,13 +33,13 @@ After confirming a failure is transient or unrelated to the change, rerun the
 failed jobs for the workflow run with the GitHub App helper:
 
 ```sh
-./scripts/github/gh-app-actions-rerun-failed.sh RUN_ID
+./scripts/gh-app.sh actions-rerun-failed RUN_ID
 ```
 
 The stable approval prefix is:
 
 ```text
-./scripts/github/gh-app-actions-rerun-failed.sh
+./scripts/gh-app.sh
 ```
 
 Use the workflow run ID from the failed job URL. This reruns only failed jobs;

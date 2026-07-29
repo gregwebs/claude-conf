@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Rerun the failed jobs in a GitHub Actions workflow run.
 #
-# Usage: ./scripts/github/gh-app-actions-rerun-failed.sh RUN_ID
+# Usage: ./scripts/gh-app.sh actions-rerun-failed RUN_ID
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

@@ -25,7 +25,7 @@ the personal skill instead of vendoring its process.
 
 This section replaces the base skill's publish step.
 
-Create all issues with `./scripts/github/gh-app-issue-create.sh`. Write issue
+Create all issues with `./scripts/gh-app.sh issue-create`. Write issue
 bodies to temp files and pass them with `--body-file`; never pass Markdown with
 `--body`.
 
@@ -50,12 +50,12 @@ If the approved breakdown has two or more tickets:
    - Use the base issue template.
    - Include `## Parent` with a reference to the parent issue number.
 3. After each child issue is created, attempt:
-   `./scripts/github/gh-app-issue-sub-add.sh --parent N --child M`
+   `./scripts/gh-app.sh issue-sub-add --parent N --child M`
 4. Sub-issue linking is failure-tolerant. If linking fails because of a 403,
    422, rate limit, or similar API issue, record the failure, keep creating the
    remaining children, and report all link outcomes at the end.
 5. After all children are created, update the parent with
-   `./scripts/github/gh-app-issue-update.sh --issue N --body-file FILE`,
+   `./scripts/gh-app.sh issue-update --issue N --body-file FILE`,
    re-sending the full body plus an appended `## Implementation tickets`
    section. List every child URL in dependency order and note any native
    sub-issue links that failed.

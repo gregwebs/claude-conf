@@ -4,7 +4,10 @@
 # Usage: ./scripts/check-ci-runs.sh [--wait] [--job JOB_NAME] [COMMIT]
 # COMMIT defaults to HEAD. With --wait, poll until the selected check runs complete.
 set -euo pipefail
-cd "$(dirname "$0")/.."
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
+TOKEN_HELPER="$SCRIPT_DIR/../../github-app/scripts/gh-app-token.sh"
 
 usage() {
   echo "usage: $0 [--wait] [--job JOB_NAME] [COMMIT]" >&2
@@ -46,8 +49,8 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-sha=$(git rev-parse "$commit")
-origin=$(git config --get remote.origin.url)
+sha=$(git -C "$REPO_ROOT" rev-parse "$commit")
+origin=$(git -C "$REPO_ROOT" config --get remote.origin.url)
 repo=${origin#*github.com[:/]}
 repo=${repo%.git}
 
@@ -62,8 +65,12 @@ github_app_secrets_dir="${GITHUB_APP_SECRETS_DIR:-$HOME/.config/github-app}"
 if [ -r "$github_app_secrets_dir/client-id" ] \
   && [ -r "$github_app_secrets_dir/installation-id" ] \
   && [ -r "$github_app_secrets_dir/private-key.pem" ]; then
+  if [ ! -r "$TOKEN_HELPER" ]; then
+    echo "check-ci-runs: GitHub App token helper not found: $TOKEN_HELPER" >&2
+    exit 1
+  fi
   # shellcheck disable=SC1091
-  source ./scripts/github/gh-app-token.sh
+  source "$TOKEN_HELPER"
   github_app_auth=true
 fi
 

@@ -28,9 +28,11 @@ Pull Requests are created that you approve and merge- how closely you review the
 
 ## Model selection
 
-The .claude/settings.local.json sets the default mode to opusplan.
-(Opus) Plan mode is cost effective because it switches betweeen Opus for planning and Sonnet for implementation.
-This will require an explicit approval to move between planning and implementing.
+`.claude/settings.local.json` selects the `opusplan` model alias. The
+permission `defaultMode` is separately set to `plan`; it requires explicit
+approval to move between planning and implementation. Opus Plan mode is cost
+effective because it switches between Opus for planning and Sonnet for
+implementation.
 
 The workflows and configuration here do not otherwise help with managing which model you use.
 
@@ -128,3 +130,23 @@ This will not work on Claude Code for the Web (cloud) because they block Github 
 There is a /github-actions-ci skill for the purpose of not asking for permission to interact with github actions.
 
 Note that in Codex skills cannot allow list tools- you need to add things allowed by the skill to the permission rules.
+
+### Repository command interface
+
+The stable entry points for GitHub work are `./scripts/gh-app.sh` and
+`./scripts/check-ci-runs.sh`. Their bundled implementations are internal and
+must not be invoked directly. Smoke-test the public interface with:
+
+```text
+workflow skills
+      |
+      v
+./scripts/{gh-app,check-ci-runs}.sh
+      |
+      v
+bundled skill implementations
+```
+
+```sh
+./script/test-repository-interface.sh
+```

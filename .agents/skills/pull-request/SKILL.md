@@ -13,8 +13,8 @@ PR=Pull Request
 
 Access Github according to the user's preference (as stated in AGENTS.md/CLAUDE.md or project memory):
 * skills
-  * /github-app skill: create the PR with gh-app-pr-create.sh
-  * /github-actions-ci: check on CI with check-ci-runs.sh
+  * /github-app skill: create the PR with `./scripts/gh-app.sh pr-create`
+  * /github-actions-ci: check on CI with `./scripts/check-ci-runs.sh`
 * Github API or MCP
 * github CLI 
 

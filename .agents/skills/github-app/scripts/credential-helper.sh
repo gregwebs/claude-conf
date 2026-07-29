@@ -2,9 +2,8 @@
 # git credential helper: mints a fresh GitHub App installation access token
 # on every invocation by signing a JWT with the App's private key.
 #
-# Wire this up per-repo (not globally) via local git config, e.g.:
-#   git config credential."https://github.com".helper "$(pwd)/scripts/github/credential-helper.sh"
-#   git config credential."https://github.com".username x-access-token
+# The public `./scripts/gh-app.sh push` command wires this helper into Git for
+# that invocation; callers should not configure or invoke it directly.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
