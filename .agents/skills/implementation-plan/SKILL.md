@@ -20,34 +20,64 @@ limitation in your result and plan anyway.
 If there is already an **Implementation Plan** that satisfies the "What to include" criteria below, use it rather than creating a new one.
 
 If there is already a spec, that is your starting point.
-If not, suggest using /grill-me-with-docs to align on changes or /to-spec to first create a spec.
-
-An Implementation Plan should be a single work item.
-Use /breakdown to determine whether this spec should be broken up into multiple work items.
-If it is multiple work items, ask the user to use /to-tickets to record the different work items.
-If they do not want to stop to create tickets, create an Implemetnation Plan for a single work item, and note in the plan the remaining work item to be followed up on.
-
-## What to include
-
-The spec and ticket will probably not include enough implementation details. The Implementation Plan will focus on code changes and how they will be tested and verified.
-The goal is to derisk the implementation in 2 ways:
-* reduce the possibility of coming across a deeper technical challenge during implementation: the implementer should be able to just write code
-* ensure the code matches the spec
-
-- The spec can be referenced from the Implementation Plan.
-- **Code change descriptions** must be detailed — include specific file paths and code snippets where needed.
-- **User stories** from the spec should be converted to a **Verification** plan section.
-- **State diagrams** for all state changes (ascii tables, art, or an html artifact).
-- **Checklist** of required changes.
-- Changes to tests and documentation, and how to do a **Verification**.
+Identify the spec source according to the instructions in the /code-review skill.
+If there is no spec, suggest using /grill-me-with-docs to align on changes or /to-spec to first create a spec.
 
 ## Scope management
 
-If creating the Implementation Plan discovers much more work than anticipated, suggest:
+An Implementation Plan should be a single work item.
+Use /breakdown to determine whether this spec should actually be broken up into multiple work items.
+We may not realize that multiple work items are apropriate until after creating the Implementation Plan and discovering there is much more work than the spec anticipated.
+In either case, suggest
+- creating additional tickets to spread the work out with /to-tickets
 - modifying the spec/tickets to reduce the work needed
-- creating additional tickets to spread the work out
+
+## What to include
+
+The spec and ticket will not include enough implementation details for a complex change. The Implementation Plan will focus on code changes and how they will be tested and verified.
+The goal is to derisk the implementation in 3 ways:
+* ensure the code matches the spec
+* ensure a sound architecture and quality set of changes
+* reduce the possibility of coming across a deeper technical challenge during implementation: the implementer should be able to just write code
+
+The spec can be referenced from the Implementation Plan.
+- **User stories** from the spec should be converted to the **Tests** or **Verification** section of the Implementation Plan.
+
+Things to include:
+- **Code change descriptions** must be detailed — include specific file paths and code snippets where needed.
+- **State diagrams** for all state changes (ascii tables, art, or an html artifact).
+- **Checklist** of required changes.
+- **Tests** various cases that should be tested.
+- **Documentation** to update
+- **Verification** steps
 
 ## Review
 
-Perform an adversarial review of the plan using /code-review but noting that it is just a plan without any actual code changes yet. If the change is a trivial change, review can be skipped.
-Adjust the plan according to that feedback.
+If the change is a trivial change, review can be skipped.
+Review must be done by a separate subagent.
+
+Perform an adversarial review of the plan by a subagent. There are 3 tracks to review, in this order:
+* **Spec** Does it meet the spec?
+* **Architecture** Does it improve or degrade the architecture of the codebase?
+* **Qualityh Standards** Does it meet our standards, and are these quality technical changes?
+
+### Identify the standards sources
+
+Identify the standards sources according to the instructions in the /code-review skill.
+
+### Architecture review
+
+Read the project's domain glossary (`CONTEXT.md`) and any ADRs in the area you're touching first.
+
+**ADR conflicts**: any ADR conflicts should be surfaced to the user. Contradictions are not forbidden but should be well motivated and approved.
+**Use CONTEXT.md vocabulary for the domain, and the `/codebase-design` vocabulary for the architecture.** If `CONTEXT.md` defines "Order," talk about "the Order intake module" — not "the FooBarHandler," and not "the Order service."
+
+Determine if any of these changes introduce shallow, complex,or small modules:
+
+- Does understanding one concept require bouncing between many small modules?
+- Are modules **shallow** — interface nearly as complex as the implementation?
+- Where have pure functions been extracted just for testability, but the real bugs hide in how they're called (no **locality**)?
+- Do tightly-coupled modules leak across their seams?
+- Which parts are untested, or hard to test through their current interface?
+
+Apply the **deletion test** to anything you suspect is shallow: would deleting it concentrate complexity, or just move it? A "yes, concentrates" is the signal you want.
