@@ -95,7 +95,6 @@ Use /to-spec to then generate a spec and /to-tickets to generate tickets.
 
 ## Bug Investigation
 
-Use /plan mode to investigate a bug in read-only mode.
 If a bug is difficult, use /diagnosing-bugs to investigate it.
 
 Generate a root cause analysis of the defect.

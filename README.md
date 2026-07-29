@@ -65,8 +65,11 @@ Workflows are started by you, normally with the skills:
 * /grill-with-docs (new feature)
 * /diagnosing-bugs (fix a bug)
 * /improve-codebase-architecture (cleanup your slop)
-* /to-spec (specify work from a conversation)
 * /wayfinder (large amount of work)
+
+Work discussed is then converted to a spec by you or the agent
+
+* /to-spec
 
 After a spec is generated, it can be broken down into slices with
 
@@ -92,6 +95,12 @@ A separate agent reviews both the plan and the code.
 Reviews are adversarial. Follow up reviews are not adversarial.
 
 
+#### Agent sends a Pull Request
+
+Commit.
+PR, and check on CI- this is Github specific.
+
+
 ## Engineering discipline
 
 The key to letting agents do more work for you is increasing the engineering discipline.
@@ -102,9 +111,9 @@ But the rest is largely project specific and is up to you to specify in your doc
 ## Security
 
 We want to let the agent do safe operations without prompting us- prompt fatigue creates security risks.
-I created a separate user on my computer for AI- that uses the Unix security model.
-On top of that I use the sandbox feature.
-Allowing operations in the sandbox can be a lot of work. You might consider using a VM or container with network restrictions rather than the claude/codex sandbox.
+The agent should be operating in an isolated sandbox.
+The agent should be a separate user on your computer- either a separate Unix user or a container/VM user.
+Have the agent write code (scripts) for common workflows and commit those.
 
 ### Github
 
