@@ -38,7 +38,8 @@ Once done, use /code-review to review the work.
 
 ## Phase 3 - completion
 
-Commit your work. Point to the issue/ticket in your commit.
+Commit your work. Point to the issue in your commit if there is a real issue tracker or committed files for issues.
+
 Leave a **Change Record** with the issue/ticket. **How** depends on your capabilities and configuration.
 
 * **Pull Request** - If you are in charge of sending Pull Requests, place the Change Record information there.
@@ -55,7 +56,7 @@ Change Record documentation is
 * ephemeral- describing a moment in time- it will not be updated
 * more verbose than normal documentation that must be kept up to date
 
-Avoid including information that is already explained in the issue/ticket (the spec).
+Avoid including information that is already in the issue/ticket (the spec) if there is a real issue tracker or committed files for issues.
 We should include information useful for implementing furture related issues/tickets, particularly if this issue/ticket has a parent issue and follow-on work. This includes:
 * Technical design choices
 * A high level summary of changes
