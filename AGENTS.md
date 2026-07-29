@@ -6,11 +6,11 @@
 
 ## Curl
 
-/usr/bin/curl may have TLS issues. Use /opt/homebrew/opt/curl/bin/curl
+/usr/bin/curl may have TLS issues. Use /opt/homebrew/opt/curl/bin/curl if available.
 
 ## Github
 
-If the /github-app skill is availble:
+If the /github-app skill is availble and configured:
 * Use it for access to the Github repo.
 * Even if you don't need to auth, still use that skill because it allow lists scripts for the interaction patterns we used.
 
@@ -40,10 +40,10 @@ If commands that you run require approval, propose writing a script for that whi
 # General workflow
 
 - update the local copy to the latest from origin and use a branch
-- /implement the changes
-- Write **Documentation** for the changes
-- Perform a **Verification**
-- Send a **Pull Request**
+- /implement the changes using workflow component sections described below
+  - **Documentation**
+  - **Verification**
+- send a /pull-request
 
 # Workflow Components
 
@@ -53,13 +53,11 @@ In code:
 * Don't document *what* code does. Rewrite code to make what it does self-documenting.
 * Document *why* code does what it does and alternative approaches that were purposefuly not taken.
 
-There should be one canonical place where something is documented (excluding Change Records).
+There should be one canonical place where something is documented.
 Check on references between documents.
 Remove out of date documentation.
 
 Add diagrams to documentation.
-
-### Technical documentation
 
 Update and add lasting technical documentation. It should be accessible by following links from the README.md.
 Documentation should explain things that are not readily available from reading the code, for example:
@@ -68,33 +66,8 @@ Documentation should explain things that are not readily available from reading 
 * technical design trade offs considered (important ones belong in ./docs/adr)
 
 
-### Change Record
-
-Put information about the current changes into a Change Record in ./docs/change.
-Change Record documentation is
-* ephemeral (it might get updated by the next commit, but that's about it).
-* more verbose than other documentation (we will cull it later).
-
-Look at older Change Records relevant to current changes.
-If any part of a Change Record becomes out of date, mark it as **DEPRECATED** at the top, and summarize the changes into a smaller document.
-
-## Pull Request
-
-Send a pull request using ./scripts/github/gh-app-pr-create.sh
-For the commit and PR description point to what is added in ./docs/change
-If the PR resolves an issue, ensure it is auto-closed by using the "Resolves" keyword: "Resolves #10".
-Check on the CI status after sending the PR using ./scripts/check-ci-runs.sh.
-If there are failures, investigate them and change the PR following the Coding instructions.
-
-If you are on main, create a new branch.
-If you are working on a sub issue of a parent issue, then there should be a parent branch.
-All sub issues that don't have dependencies should use the parent branch as their base branch to send a pull request against.
-If the sub issue requires an existing PR to be merged, then the base branch will be the branch for that PR and the PR should use github's pull request stack feature.
-
-
 ## Verification
 
-Perform an /code-review before Verification and a followup review if any changes are made during/after verification.
 Verify manually that the changes work as expected in a live application.
 Test edge cases and failure modes in addition to the happy path.
 Look at the **Implementation Plan** for verification tests to peform.
