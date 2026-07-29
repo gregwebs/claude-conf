@@ -40,7 +40,7 @@ Once done, use /code-review to review the work.
 
 Commit your work. Point to the issue in your commit if there is a real issue tracker or committed files for issues.
 
-Leave a **Change Record** with the issue/ticket. **How** depends on your capabilities and configuration.
+Record a **Change Record**. **How** depends on your capabilities and configuration.
 
 * **Pull Request** - If you are in charge of sending Pull Requests, place the Change Record information there.
 * No PR, but have an issue tracker configured:

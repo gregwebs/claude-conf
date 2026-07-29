@@ -148,5 +148,5 @@ bundled skill implementations
 ```
 
 ```sh
-./script/test-repository-interface.sh
+./test/repository-interface.sh
 ```

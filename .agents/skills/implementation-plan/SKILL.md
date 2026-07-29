@@ -21,7 +21,7 @@ If there is already an **Implementation Plan** that satisfies the "What to inclu
 
 If there is already a spec, that is your starting point.
 Identify the spec source according to the instructions in the /code-review skill.
-If there is no spec, suggest using /grill-me-with-docs to align on changes or /to-spec to first create a spec.
+If there is no spec, suggest using /grill-with-docs to align on changes or /to-spec to first create a spec.
 
 ## Scope management
 

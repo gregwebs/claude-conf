@@ -32,7 +32,7 @@ Only ask the user to resolve review issues if
 * resolution would alter the plan/spec.
 * the agents disagree on significantly different approaches (for a similar approaches choose one)
 
-## Claud Prefers Codex
+## Claude Prefers Codex
 
 When running from Claude Code, if the codex plugin is installed, use Codex. Do not substitute Claude's own review.
 However, do not invoke Codex for trivial documentation or formatting-only changes.
@@ -45,7 +45,7 @@ Invoke Codex via:
 node $HOME/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs task --cwd "$(pwd)"
 ```
 
-If the code is already committed, add: `--base main`
+If the code is already committed, add: `--base $branch`
 
 Pass the plan/spec as `--prompt-file`, starting with "Review the following plan/spec".
 If there is only a conversation to go off of, summarize it to a spec first with the /to-spec skill.

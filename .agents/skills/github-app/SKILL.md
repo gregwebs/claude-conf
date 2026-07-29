@@ -106,9 +106,7 @@ Reasons:
 2. `--base` is usually `main`; `--head` is the current feature branch
    (`git rev-parse --abbrev-ref HEAD`). Use `./scripts/gh-app.sh push`; its
    bundled credential helper handles App authentication and curl selection.
-3. Per this project's CLAUDE.md workflow, the **PR description should point to
-   the change's entry in `./docs/change/`** — summarize there and reference it
-   in the body.
+3. Follow repository instructions or conventions for PR Body contents.
 4. Write the body file, run the script, relay the printed PR URL.
 
 ## Filing an issue
