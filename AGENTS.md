@@ -81,25 +81,13 @@ Consider whether any manual verification steps should be added as automated test
 Don't make any changes to data that cannot be undone.
 When updating database data, first create a backup of the existing database.
 
-# Workflow entry points
-
-## New feature
-
-If there is not a specification, use /grill-with-docs to align and then /to-spec to generate a spec.
-From a spec, use /to-tickets to generate tickets.
-
-## Improve Codebase Architecture
-
-This is provided by the /improve-codebase-architecture skill.
-Use /to-spec to then generate a spec and /to-tickets to generate tickets.
-
 ## Bug Investigation
 
-If a bug is difficult, use /diagnosing-bugs to investigate it.
+If a bug is non-trivial, use /diagnosing-bugs to investigate it.
 
 Generate a root cause analysis of the defect.
 A simple straightforward root cause and fix can be implemented immediately without a ticket.
 Otherwise,
 * Save the root cause analysis on the ticket for the defect.
 * If there is no ticket, create one using /to-tickets.
-  * Suggest how to fix the defect and also place that on the ticket.
+  * Suggest how to fix the defect on the ticket, but the main focus is on root cause analysis.
