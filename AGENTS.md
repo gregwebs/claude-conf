@@ -73,11 +73,7 @@ Test edge cases and failure modes in addition to the happy path.
 Look at the **Implementation Plan** for verification tests to peform.
 Follow CONTRIBUTING.md for instructions on how to run the program for verification.
 
-Start up a server on a separate port with a separate test database `--db` and a separate `--workdir` directory for saving concert information
-When there are backend changes, first test the API.
-Use Playwright to confirm visual/interaction aspects of the UI.
 Consider whether any manual verification steps should be added as automated tests.
-
 Don't make any changes to data that cannot be undone.
 When updating database data, first create a backup of the existing database.
 
