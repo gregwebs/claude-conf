@@ -47,7 +47,7 @@ If creating the Implementation Plan discovers much more work than anticipated, s
 - modifying the spec/tickets to reduce the work needed
 - creating additional tickets to spread the work out
 
-## Agent Review
+## Review
 
-Perform an adversarial review of the plan using /code-review but noting that it is just a plan without any actual code changes yet. If the change is a trivial change, /code-review can be skipped.
+Perform an adversarial review of the plan using /code-review but noting that it is just a plan without any actual code changes yet. If the change is a trivial change, review can be skipped.
 Adjust the plan according to that feedback.
