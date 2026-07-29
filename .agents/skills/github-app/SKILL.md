@@ -1,23 +1,23 @@
 ---
 name: github-app
-description: Read and update GitHub issues, push branches, and create or update pull requests, issues, and comments for this repo via the App-authenticated scripts in ./scripts/github/. Use for GitHub reads or writes, including "open a PR", "send a pull request", "file/read/update an issue", "comment on the PR/issue", or an App-authenticated push.
+description: Read and update GitHub issues, push branches, and create or update pull requests, issues, and comments for this repo via the App-authenticated scripts in ./scripts/. Use for GitHub reads or writes, including "open a PR", "send a pull request", "file/read/update an issue", "comment on the PR/issue", or an App-authenticated push.
 user-invocable: true
 allowed-tools:
   - Read
   - Write
-  - Bash(./scripts/github/*)
-  - Bash(./scripts/github/gh-app.sh*)
-  - Bash(git push*)
-  - Bash(git rev-parse*)
-  - Bash(git branch*)
-  - Bash(git status*)
-  - Bash(git commit*)
+  - Bash(./scripts/*)
+  - Bash(git push *)
+  - Bash(git rev-parse *)
+  - Bash(git branch -c *)
+  - Bash(git switch *)
+  - Bash(git status *)
+  - Bash(git commit *)
 ---
 
 # /github-app — GitHub PR / issue / comment via the App scripts
 
-Thin wrappers in `scripts/github/` that hit the GitHub REST API authenticated as
-the `greg-weber-claude-agent` GitHub App installation. They mint their own
+Thin wrappers in `scripts/` that hit the GitHub REST API authenticated as
+a GitHub App installation. They mint their own
 short-lived (~9 min) token per call — nothing to log into. Each script prints
 the resulting `html_url` on success; **always relay that URL back to the user.**
 
@@ -52,7 +52,7 @@ rule.
 Stable command prefixes are:
 
 ```text
-./scripts/github/gh-app.sh
+./scripts/gh-app.sh
 git push
 ```
 
@@ -91,7 +91,7 @@ Reasons:
 ```
 # 1. Write the body to /private/tmp/pr-body.md
 # 2. Pass it
-./scripts/github/gh-app.sh pr-create --base main --head my-branch \
+./scripts/gh-app.sh pr-create --base main --head my-branch \
   --title "..." --body-file /private/tmp/pr-body.md
 ```
 
@@ -112,7 +112,7 @@ Reasons:
 ## Filing an issue
 
 ```
-./scripts/github/gh-app.sh issue-create --title "Title" \
+./scripts/gh-app.sh issue-create --title "Title" \
   --body-file "$TMPDIR/issue-body.md" --label bug --label "needs triage"
 ```
 `--label` repeats per label. Relay the printed issue URL.
@@ -122,7 +122,7 @@ Reasons:
 GitHub treats PR conversation comments as issue comments, so the **same script
 and PR/issue number** work for both:
 ```
-./scripts/github/gh-app.sh issue-comment --issue 1 --body-file "$TMPDIR/comment.md"
+./scripts/gh-app.sh issue-comment --issue 1 --body-file "$TMPDIR/comment.md"
 ```
 
 ## Failure modes
@@ -144,7 +144,7 @@ and PR/issue number** work for both:
 ## Setup reference
 
 All GitHub-interaction code (token minting, git credential helper, the
-gh-app-*.sh scripts, lib.sh) lives in `./scripts/github/` and is tracked in
+gh-app-*.sh scripts, lib.sh) lives in `./scripts/` and is tracked in
 this repo. The only things that live outside the repo, in
 `~/.config/github-app/` (not tracked, `chmod 700`/`600`), are the two actual
 secrets:

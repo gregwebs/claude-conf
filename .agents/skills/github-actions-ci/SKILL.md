@@ -1,6 +1,7 @@
 ---
 name: github-actions-ci
 description: Monitor, wait for, and diagnose this repository's GitHub Actions checks with ./scripts/check-ci-runs.sh. Use after pushing or opening/updating a PR, when asked to watch CI or verify a named job such as Playwright, or when a GitHub Actions check fails.
+allowed-tools: Bash(./scripts/check-ci-runs.sh)
 ---
 
 # GitHub Actions CI
@@ -16,8 +17,8 @@ Run one of these stable command shapes from the repository root:
 ```sh
 ./scripts/check-ci-runs.sh
 ./scripts/check-ci-runs.sh --wait
-./scripts/check-ci-runs.sh --job playwright --wait
-./scripts/check-ci-runs.sh --job playwright --wait COMMIT
+./scripts/check-ci-runs.sh --job JOB --wait
+./scripts/check-ci-runs.sh --job JOB --wait COMMIT
 ```
 
 The stable approval prefix is:
@@ -80,9 +81,6 @@ On failure:
    supports it.
 4. Make only in-scope changes, run the relevant local checks, push, and wait for
    the replacement CI run.
-5. If Playwright cannot launch locally with the documented host-level `SIGTRAP`
-   failure, record that limitation and treat Linux Playwright CI as the browser
-   verification surface. Do not repeatedly request broader execution approval.
 
-For CI architecture, artifacts, and Playwright-specific troubleshooting, read
-`docs/playwright.md` rather than duplicating it here.
+For CI architecture, artifacts, and project specific troubleshooting, create
+and update project specific documentation rather than duplicating it here.
