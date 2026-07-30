@@ -5,7 +5,7 @@
 #          [--repo OWNER/REPO] [--body TEXT | --body-file FILE] [--draft]
 #
 # --repo defaults to the current directory's github.com origin remote.
-# Requires a GitHub App set up per docs/change/2026-06-20-github-app-push.md
+# Requires a GitHub App set up per the Setup reference in the /github-app skill.
 # (client-id, private-key.pem under ~/.config/github-app/, not tracked;
 # installation granted Contents:write + Pull requests:write on the repo).
 set -euo pipefail

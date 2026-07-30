@@ -1,6 +1,5 @@
-* README.md for an overview of the project
-* CONTRIBUTING.md for development instructions
-* CODING_STANDARDS.md for how to write code
+* Read README.md for the project overview and repository command interface.
+* Discover additional applicable standards documents when they apply such as `CONTRIBUTING.md` and `CODING_STANDARDS.md`.
 
 # Tool Usage
 
@@ -39,11 +38,11 @@ If commands that you run require approval, propose writing a script for that whi
 
 # General workflow
 
-- update the local copy to the latest from origin and use a branch
+- Update the local copy to the latest from origin and use a branch
 - /implement the changes using workflow component sections described below
   - **Documentation**
   - **Verification**
-- send a /pull-request
+- Send a `/pull-request` when requested and GitHub access is available
 
 # Workflow Components
 
@@ -57,7 +56,7 @@ There should be one canonical place where something is documented.
 Check on references between documents.
 Remove out of date documentation.
 
-Add diagrams to documentation.
+Add diagrams when they make a relationship materially clearer.
 
 Update and add lasting technical documentation. It should be accessible by following links from the README.md.
 Documentation should explain things that are not readily available from reading the code, for example:
@@ -68,14 +67,14 @@ Documentation should explain things that are not readily available from reading 
 
 ## Verification
 
-Verify manually that the changes work as expected in a live application.
+Verify manually that the changes work as expected in an e2e user setting.
 Test edge cases and failure modes in addition to the happy path.
 Look at the **Implementation Plan** for verification tests to peform.
-Follow CONTRIBUTING.md for instructions on how to run the program for verification.
+Follow any tracked project-specific instructions that are present.
 
 Consider whether any manual verification steps should be added as automated tests.
 Don't make any changes to data that cannot be undone.
-When updating database data, first create a backup of the existing database.
+When authorized to update database data, first create a backup of the existing database.
 
 ## Bug Investigation
 

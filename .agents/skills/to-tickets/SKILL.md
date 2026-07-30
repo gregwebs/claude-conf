@@ -18,8 +18,7 @@ and follow its full process: gather context, draft vertical slices, quiz the
 user, iterate until approved, and publish.
 
 If that base file does not exist on this machine, stop and tell the user the
-personal `to-tickets` skill is missing. This wrapper intentionally depends on
-the personal skill instead of vendoring its process.
+personal `to-tickets` skill is missing.
 
 ## Publishing override for this repo
 
