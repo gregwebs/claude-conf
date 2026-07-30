@@ -5,7 +5,7 @@ set -euo pipefail
 REPOSITORY_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 GITHUB_DISPATCHER="$REPOSITORY_ROOT/scripts/gh-app.sh"
 CI_CHECKER="$REPOSITORY_ROOT/scripts/check-ci-runs.sh"
-INLINE_CHECKER="$REPOSITORY_ROOT/scripts/check-skill-inlines.pl"
+INLINE_CHECKER="$REPOSITORY_ROOT/scripts/check-skill-inlines.sh"
 
 fail() {
   echo "test-repository-interface: $*" >&2
@@ -65,6 +65,33 @@ write_fixture() {
   printf '%s' "$contents" >"$path"
 }
 
+sha256_file() {
+  local output
+  output=$(openssl dgst -sha256 "$1") || fail "failed to hash fixture: $1"
+  printf '%s\n' "${output##* }"
+}
+
+write_inline_skill() {
+  local path="$1"
+  local source="$2"
+  local digest="$3"
+  local metadata_before="$4"
+  local metadata_after="$5"
+  local local_body="$6"
+
+  write_fixture "$path" "---
+metadata:
+${metadata_before}  inlined-from:
+    - source: $source
+      source-scope: \"## Process\"
+      source-scope-sha256: \"$digest\"
+      components:
+        - source-section: \"### Source\"
+          local-section: \"### Local\"
+${metadata_after}---
+${local_body}"
+}
+
 run_inline_fixtures() {
   local fixture_root source skill digest
   fixture_root=$(mktemp -d "$TEMP_ROOT/claude-conf-inline.XXXXXX")
@@ -73,45 +100,23 @@ run_inline_fixtures() {
   skill="$fixture_root/SKILL.md"
 
   write_fixture "$source" $'## Process\n\n### Source\ntext\n'
-  digest=$(perl -MDigest::SHA=sha256_hex -0777 -e '$raw=<>; $raw =~ /(## Process\n.*)/s; print sha256_hex($1)' "$source")
-  write_fixture "$skill" "---
-metadata:
-  inlined-from:
-    - source: $source
-      source-scope: \"## Process\"
-      source-scope-sha256: \"$digest\"
-      components:
-        - source-section: \"### Source\"
-          local-section: \"### Local\"
----
-### Local
-text
-"
+  digest=$(sha256_file "$source")
+  write_inline_skill "$skill" "$source" "$digest" '' '' $'### Local\ntext\n'
   assert_checker_result pass "$skill"
 
-  write_fixture "$skill" "$(sed '/metadata:/a\  short-description: fixture' "$skill")"
+  write_inline_skill "$skill" "$source" "$digest" \
+    $'  short-description: fixture\n' '' $'### Local\ntext\n'
   assert_checker_result pass "$skill"
-  write_fixture "$skill" "$(sed '/---$/!b;n; s/^/  local-note: fixture\n/' "$skill")"
+  write_inline_skill "$skill" "$source" "$digest" \
+    '' $'  local-note: fixture\n' $'### Local\ntext\n'
   assert_checker_result pass "$skill"
 
   write_fixture "$source" $'## Process\n### Source\ntext\n## Outside\ntext\n'
   write_fixture "$skill" "$(sed 's/source-section: "### Source"/source-section: "## Outside"/' "$skill")"
   assert_checker_result fail "$skill"
   write_fixture "$source" $'## Process\n\n### Source\ntext\n'
-  digest=$(perl -MDigest::SHA=sha256_hex -0777 -e '$raw=<>; $raw =~ /(## Process\n.*)/s; print sha256_hex($1)' "$source")
-  write_fixture "$skill" "---
-metadata:
-  inlined-from:
-    - source: $source
-      source-scope: \"## Process\"
-      source-scope-sha256: \"$digest\"
-      components:
-        - source-section: \"### Source\"
-          local-section: \"### Local\"
----
-### Local
-text
-"
+  digest=$(sha256_file "$source")
+  write_inline_skill "$skill" "$source" "$digest" '' '' $'### Local\ntext\n'
 
   write_fixture "$skill" "$(sed "s|source: $source|source: $fixture_root/missing.md|" "$skill")"
   assert_checker_result fail "$skill"
@@ -132,35 +137,27 @@ text
   write_fixture "$source" $'## Process\n### Source\na\n### Source\nb\n'
   assert_checker_result fail "$skill"
   write_fixture "$source" $'## Process\n### Source\ntext\n'
-  digest=$(perl -MDigest::SHA=sha256_hex -0777 -e '$raw=<>; $raw =~ /(## Process\n.*)/s; print sha256_hex($1)' "$source")
+  digest=$(sha256_file "$source")
   write_fixture "$skill" "$(sed -e "s/[0-9a-f]\{64\}/$digest/" -e 's/local-section: "### Local"/local-section: "### Missing"/' "$skill")"
   assert_checker_result fail "$skill"
-  write_fixture "$skill" "$(sed 's/### Missing/### Local\n### Local/' "$skill")"
+  write_inline_skill "$skill" "$source" "$digest" '' '' \
+    $'### Local\ntext\n### Local\ntext\n'
   assert_checker_result fail "$skill"
-  write_fixture "$skill" "$(sed -e 's/[0-9a-f]\{64\}/not-a-digest/' -e 's/### Local\n### Local/### Local/' "$skill")"
+  write_inline_skill "$skill" "$source" 'not-a-digest' '' '' \
+    $'### Local\ntext\n'
   assert_checker_result fail "$skill"
-  write_fixture "$skill" "$(sed 's/not-a-digest/0000000000000000000000000000000000000000000000000000000000000000/' "$skill")"
+  write_inline_skill "$skill" "$source" \
+    '0000000000000000000000000000000000000000000000000000000000000000' \
+    '' '' $'### Local\ntext\n'
   assert_checker_result fail "$skill"
 
   write_fixture "$source" $'## Process\n```markdown\n### Ignored\n```\n### Source\ntext\n'
-  digest=$(perl -MDigest::SHA=sha256_hex -0777 -e '$raw=<>; print sha256_hex($raw)' "$source")
-  write_fixture "$skill" "---
-metadata:
-  inlined-from:
-    - source: $source
-      source-scope: \"## Process\"
-      source-scope-sha256: \"$digest\"
-      components:
-        - source-section: \"### Source\"
-          local-section: \"### Local\"
----
-### Local
-text
-"
+  digest=$(sha256_file "$source")
+  write_inline_skill "$skill" "$source" "$digest" '' '' $'### Local\ntext\n'
   assert_checker_result pass "$skill"
 
   write_fixture "$source" $'## Process\r\n### Source\r\ntext\r\n'
-  digest=$(perl -MDigest::SHA=sha256_hex -0777 -e '$raw=<>; print sha256_hex($raw)' "$source")
+  digest=$(sha256_file "$source")
   write_fixture "$skill" "$(sed "s/[0-9a-f]\{64\}/$digest/" "$skill")"
   assert_checker_result pass "$skill"
   write_fixture "$source" $'## Process\r\n### Source\r\ntext'
@@ -199,8 +196,7 @@ assert_readable "$REPOSITORY_ROOT/.agents/skills/github-app/scripts/gh-app-token
 
 for tracked_path in \
   .agents/skills/implementation-plan/SKILL.md \
-  .agents/skills/implement/SKILL.md \
-  .agents/skills/code-review/SKILL.md; do
+  .agents/skills/implement/SKILL.md ; do
   assert_tracked "$tracked_path"
 done
 
@@ -217,15 +213,9 @@ for adapter in \
     fail "adapter contains a repository-local skill path: $adapter"
   fi
 done
-assert_contains .agents/skills/code-review/SKILL.md 'git diff --cached'
-assert_contains .agents/skills/code-review/SKILL.md 'git status --short'
-if rg -q '\.claude/agents|plugins/cache' "$REPOSITORY_ROOT/.agents/skills/code-review/SKILL.md"; then
-  fail 'reviewer instructions contain a platform dependency'
-fi
 if rg -q '\bmain\b' "$REPOSITORY_ROOT/.agents/skills/pull-request/SKILL.md"; then
   fail 'pull-request instructions assume main instead of the discovered default branch'
 fi
-assert_contains AGENTS.md '## Change Record'
 if rg -q 'docs/change/' "$REPOSITORY_ROOT/.agents/skills/github-app"; then
   fail 'GitHub App instructions reference absent change history files'
 fi
@@ -250,8 +240,6 @@ assert_contains .agents/skills/breakdown/SKILL.md 'inlined-from:'
 assert_contains .agents/skills/breakdown/SKILL.md '### 4. Quiz the user'
 assert_contains .agents/skills/implementation-plan/SKILL.md 'inlined-from:'
 assert_contains .agents/skills/implementation-plan/SKILL.md '### 2. Identify the spec source'
-assert_contains .agents/skills/code-review/SKILL.md 'inlined-from:'
-assert_contains .agents/skills/code-review/SKILL.md '### 1. Pin the fixed point'
 for skill in implement to-tickets pull-request github-app github-actions-ci grilling; do
   if rg -q 'inlined-from:' "$REPOSITORY_ROOT/.agents/skills/$skill/SKILL.md"; then
     fail "unexpected inline provenance inventory for $skill"

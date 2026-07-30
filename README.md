@@ -71,7 +71,7 @@ Skills that copy or behaviorally adapt upstream sections declare
 heading, scope SHA-256, and source/local heading pairs. Context pointers,
 delegation, and locally owned replacements are not inlining.
 
-Run `./scripts/check-skill-inlines.pl` to validate all tracked records, or pass
+Run `./scripts/check-skill-inlines.sh` to validate all tracked records, or pass
 specific `SKILL.md` paths for fixtures. On drift, review the named upstream
 scope and local components, port or intentionally decline the behavior, then
 refresh the digest. Parent-scope hashes also detect inserted sibling sections;
@@ -178,10 +178,10 @@ For local validation, run:
 
 ```sh
 ./test/repository-interface.sh
-./scripts/check-skill-inlines.pl
+./scripts/check-skill-inlines.sh
 git diff --check
 ```
 
-The contract needs `jq`, Perl core `Digest::SHA`, and the installed skills named
-by provenance. ShellCheck and optional skill validation need separately
-installed tools; report unavailable tools rather than treating CI as coverage.
+The contract needs `jq`, Bash, OpenSSL, and the installed skills named by
+provenance. ShellCheck and optional skill validation need separately installed
+tools; report unavailable tools rather than treating CI as coverage.
