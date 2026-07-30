@@ -26,6 +26,20 @@ These are **outward-facing actions** (they publish to GitHub and notify people).
 This skill only runs in response to a request the user typed in their terminal.
 Confirm the target (repo, branch, title) before running if there's any ambiguity.
 
+## Setup reference
+
+Two pieces of metadata are required that live outside of this repo.:
+In `~/.config/github-app/ (Override with `GITHUB_APP_SECRETS_DIR`) are:
+
+- `client-id` — the App's client ID (used as the JWT `iss` claim)
+- `installation-id` - the installation scope id
+- `private-key.pem` — the App's private key (signs the JWT)
+
+These files should only be accessible to the user (permission 0600).
+
+If these files are missing, the skill is not configured.
+If the skill needs to be used, prompt the user to add these files.
+
 ## The scripts
 
 | Action | Dispatcher command | Required args |
@@ -140,20 +154,3 @@ and PR/issue number** work for both:
 - These scripts use `curl`/`jq` (not `gh`) on purpose: `gh` fails TLS against
   `api.github.com` in this sandbox. They automatically prefer the Homebrew curl
   required on this host. Don't add a `PATH` prefix or substitute `gh`.
-
-## Setup reference
-
-The public dispatcher lives at `./scripts/gh-app.sh`. GitHub-interaction
-implementation code is bundled under this skill and tracked in this repo.
-The only things that live outside the repo, in
-`~/.config/github-app/` (not tracked, `chmod 700`/`600`), are the two actual
-secrets:
-
-- `client-id` — the App's client ID (used as the JWT `iss` claim)
-- `private-key.pem` — the App's private key (signs the JWT)
-
-The installation ID isn't a secret but should be placed in `~/.config/github-app/installation-id`.
-Override the secrets directory with `GITHUB_APP_SECRETS_DIR` if needed (default `~/.config/github-app`).
-
-Full write-up and history: `docs/change/2026-06-20-github-app-push.md` and
-`docs/change/2026-07-01-github-scripts-tracked.md`.
