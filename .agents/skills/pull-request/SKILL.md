@@ -21,9 +21,12 @@ Access Github if the capability is available and the user instructs it.
 ## Branching
 
 Discover the default branch; if you are on it, create a new branch.
+
 If you are working on a sub issue of a parent issue, then look for an active parent branch to use as the base.
 All sub issues that do not have dependencies should use the discovered default branch or the parent branch as their base branch.
-If the sub issue requires an existing PR to be merged, then the base branch will be the branch for that PR and the PR should be created as [Stacked PR](https://github.github.com/gh-stack/introduction/overview/).
+If the sub issue requires an existing PR to be merged, then the base branch will be the branch for that PR.
+
+When there will be multiple outstanding PRs dependent on each other, create them as [Stacked PR](https://github.github.com/gh-stack/introduction/overview/).
 
 ## Description
 
