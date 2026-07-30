@@ -54,6 +54,29 @@ That makes it easy to adjust the skills by inheriting them.
 This repo does just that.
 If you install mattpocock/skills local to your project then you will need to rename the skills from this repo that are overriding mattpocock/skills.
 
+### Instruction ownership and provenance
+
+```text
+README.md (setup and maintenance)
+             |
+             v
+AGENTS.md (repository policy and Change Record)
+             |
+             +--> shared skills (workflow behavior)
+             +--> Claude/Codex adapters (platform configuration + pointer)
+```
+
+Skills that copy or behaviorally adapt upstream sections declare
+`metadata.inlined-from`: an absolute or `~/` upstream `SKILL.md`, exact parent
+heading, scope SHA-256, and source/local heading pairs. Context pointers,
+delegation, and locally owned replacements are not inlining.
+
+Run `./scripts/check-skill-inlines.sh` to validate all tracked records, or pass
+specific `SKILL.md` paths for fixtures. On drift, review the named upstream
+scope and local components, port or intentionally decline the behavior, then
+refresh the digest. Parent-scope hashes also detect inserted sibling sections;
+never refresh a digest merely to silence the checker.
+
 
 ### CLAUDE.md vs AGENTS.md
 
@@ -100,7 +123,7 @@ Reviews are adversarial. Follow up reviews are not adversarial.
 #### Agent sends a Pull Request
 
 Commit.
-PR, and check on CI- this is Github specific.
+PR, and check on CI- this is Github specific and conditional on setting up access and instructing in AGENTS.md/CLAUDE.md to send a PR.
 
 
 ## Engineering discipline
@@ -150,3 +173,15 @@ bundled skill implementations
 ```sh
 ./test/repository-interface.sh
 ```
+
+For local validation, run:
+
+```sh
+./test/repository-interface.sh
+./scripts/check-skill-inlines.sh
+git diff --check
+```
+
+The contract needs `jq`, Bash, OpenSSL, and the installed skills named by
+provenance. ShellCheck and optional skill validation need separately installed
+tools; report unavailable tools rather than treating CI as coverage.

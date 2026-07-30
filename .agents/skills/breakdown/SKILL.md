@@ -1,12 +1,26 @@
 ---
 name: breakdown
 description: Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges
+metadata:
+  inlined-from:
+    - source: ~/.agents/skills/to-tickets/SKILL.md
+      source-scope: "## Process"
+      source-scope-sha256: "7d56cc72dd143ddb75808194e61b249c0be626b8bbab3541504f55e21087e076"
+      components:
+        - source-section: "### 1. Gather context"
+          local-section: "### 1. Gather context"
+        - source-section: "### 2. Explore the codebase (optional)"
+          local-section: "### 2. Explore the codebase (optional)"
+        - source-section: "### 3. Draft vertical slices"
+          local-section: "### 3. Draft vertical slices"
+        - source-section: "### 4. Quiz the user"
+          local-section: "### 4. Quiz the user"
 ---
 
 # Breakdown
 
-Break a plan, spec, or conversation into a set of **tickets** — tracer-bullet vertical slices, each declaring the tickets that **block** it.
-This is a subset of /to-tickets- it removes the publishing step.
+Turn already-understood work into locally useful tracer-bullet slices. Unlike
+`/to-tickets`, this skill intentionally stops before publishing tickets.
 
 ## Process
 

@@ -10,7 +10,7 @@
 # --clear-labels is required.
 # Passing --label replaces the issue's full label set with the provided labels.
 # Passing --clear-labels replaces the issue's full label set with an empty set.
-# Requires a GitHub App set up per docs/change/2026-06-20-github-app-push.md
+# Requires a GitHub App set up per the Setup reference in the /github-app skill.
 # (client-id, private-key.pem under ~/.config/github-app/, not tracked;
 # installation granted Issues:write on the repo).
 set -euo pipefail
