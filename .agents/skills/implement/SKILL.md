@@ -44,9 +44,6 @@ plan paths. Review in Spec → Architecture → Quality order and persist the
 findings as `plan-review.md`. Give a fresh planner those three artifact paths,
 then replace `implementation-plan.md` with the revised output.
 
-Present the revised plan to the user and do not begin Phase 2 until they approve
-it.
-
 ## Phase 2 - Plan execution
 
 Delegate to a fresh `implementer` with only the `task-brief.md` and
