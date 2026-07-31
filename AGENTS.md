@@ -1,4 +1,6 @@
-* Read README.md for the project overview and repository command interface.
+Important Documentation
+
+* README.md for a starting point
 * Discover additional applicable standards documents when they apply such as `CONTRIBUTING.md` and `CODING_STANDARDS.md`.
 
 # Tool Usage
@@ -35,28 +37,11 @@ Use allow listed commands from skills and settings.
 
 If commands that you run require approval, propose writing a script for that which can be permanently allow listed.
 
-
-# General workflow
-
-- Update the local copy to the latest from origin and use a branch
-- /implement the changes using workflow component sections described below
-  - **Documentation**
-  - **Verification**
-- Send a `/pull-request` when requested and GitHub access is available
-
-# Workflow Components
-
 ## Documentation
-
-In code:
-* Don't document *what* code does. Rewrite code to make what it does self-documenting.
-* Document *why* code does what it does and alternative approaches that were purposefuly not taken.
 
 There should be one canonical place where something is documented.
 Check on references between documents.
-Remove out of date documentation.
-
-Add diagrams when they make a relationship materially clearer.
+Cull out of date documentation.
 
 Update and add lasting technical documentation. It should be accessible by following links from the README.md.
 Documentation should explain things that are not readily available from reading the code, for example:
@@ -64,17 +49,15 @@ Documentation should explain things that are not readily available from reading 
 * purpose and product needs
 * technical design trade offs considered (important ones belong in ./docs/adr)
 
+Add diagrams when they make a relationship or an operation materially clearer.
 
-## Verification
+# Workflows
 
-Verify manually that the changes work as expected in an e2e user setting.
-Test edge cases and failure modes in addition to the happy path.
-Look at the **Implementation Plan** for verification tests to peform.
-Follow any tracked project-specific instructions that are present.
+## General
 
-Consider whether any manual verification steps should be added as automated tests.
-Don't make any changes to data that cannot be undone.
-When authorized to update database data, first create a backup of the existing database.
+- Update the local copy to the latest from origin and use a branch
+- /implement the changes using workflow component sections described below
+
 
 ## Bug Investigation
 

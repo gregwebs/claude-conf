@@ -31,9 +31,22 @@ Use /tdd where possible, at pre-agreed seams.
 
 Run typechecking regularly, single test files regularly, and the full test suite once at the end.
 
+Don't document *what* code does. Write new code to make what it does self-documenting.
+When apropriate document *why* code does what it does due to a requirement or in preference to an alternative.
+
 Once done, use `/code-review` to review the work.
 
-## Phase 3 - Completion
+## Phase 3 - Verification
+
+Verify manually that the changes work as expected in an e2e end user setting.
+Test edge cases and failure modes in addition to the happy path.
+Look at the **Implementation Plan** for verification tests to peform.
+
+Consider whether any manual verification steps can and should be added as automated tests.
+Don't make any changes to data that cannot be undone.
+If possible work against a backup of data or seed data.
+
+## Phase 4 - Completion
 
 Do the following if your instructions authorize/direct it and the capability is available.
 * Commit your work
