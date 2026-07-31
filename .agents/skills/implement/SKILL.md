@@ -79,7 +79,7 @@ If possible work against a backup of data or seed data.
 ## Phase 4 - Completion
 
 Do the following if your instructions authorize/direct it and the capability is available.
-* Commit your work
+* Commit your work. Reference relevant issues/tickets in your commit message.
 * Generate a PR
 * Watch for CI success
 
