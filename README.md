@@ -5,13 +5,6 @@ AI configuration to produce high quality code.
 * Increase Agent code quality (fewer defects, stronger code base)
 * Decrease user overview
 
-Downsides
-* It takes AI more time to complete its task
-* Higher cost to initially complete a feature
-  * For a non-prototype you will save costs due to
-    * Fewer defects
-    * A more agile code base
-
 These are achieved by:
 * outlining a workflow that emphasizes specing, planning, testing, verification, and architecture/design
 * having a separate agent review at every stage
@@ -20,27 +13,36 @@ Requirements from you
 * You have to get deeply involved with the planning stage
 * Spend effort on engineering discipline
 
+Downsides
+* It takes AI more time to complete its task
+* Higher cost to initially complete a feature
+  * For a non-prototype you will save costs due to
+    * Fewer defects
+    * A more agile code base
 
 
 As code quality increases, the agent can do more hands off work for you.
-The goal is to allow the agents to do as much work for you as you are comfortable with.
-This configuration pushes things towards a large investment in alignment via grill-with-docs (give this a try, its amazing!) and then optional involvement after that point.
-Pull Requests are created that you approve and merge- how closely you review them is up to you.
+This configuration pushes you towards a large investment in alignment and specing via grill-with-docs and then optional involvement after that point.
+If configured and allowed, the agent can send Pull Requests, and you can decide how closesly to review them.
 
-## Model selection
+## Docs
 
-`.claude/settings.local.json` selects the `opusplan` model alias. The
-permission `defaultMode` is separately set to `plan`; it requires explicit
-approval to move between planning and implementation. Opus Plan mode is cost
-effective because it switches between Opus for planning and Sonnet for
-implementation.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for how to test changes to this repo.
 
-The workflows and configuration here do not otherwise help with managing which model you use.
+## CLAUDE.md vs AGENTS.md
+
+CLAUDE.md has @AGENTS.md at the top- that will include the contents of AGENTS.md into CLAUDE.md
 
 ## Implementation
 
 These files are designed to be generic with respect to programming language and project.
-Most of what exists in AGENTS.md is gradually moving into skills because they are composeable.
+The implementation is in the skills, which are designed to be generic.
+You customize things for your repo by editing
+* AGENTS.md
+* README.md and other docs used by the agent, suggested:
+  * CODING_STANDARDS.md (for writing and reviewing code)
+  * CONTRIBUTING.md (for how to run and test the project)
+  * USAGE.md - if you have a public interface to document
 
 ### Base
 
@@ -57,16 +59,6 @@ If you install mattpocock/skills local to your project then you will need to ren
 
 ### Instruction ownership and provenance
 
-```text
-README.md (setup and maintenance)
-             |
-             v
-AGENTS.md (repository policy and Change Record)
-             |
-             +--> shared skills (workflow behavior)
-             +--> Claude/Codex adapters (platform configuration + pointer)
-```
-
 Skills that copy or behaviorally adapt upstream sections declare
 `metadata.inlined-from`: an absolute or `~/` upstream `SKILL.md`, exact parent
 heading, scope SHA-256, and source/local heading pairs. Context pointers,
@@ -79,25 +71,21 @@ refresh the digest. Parent-scope hashes also detect inserted sibling sections;
 never refresh a digest merely to silence the checker.
 
 
-### CLAUDE.md vs AGENTS.md
-
-CLAUDE.md has @AGENTS.md at the top- that will include the contents of AGENTS.md into CLAUDE.md
-
-
 ## Workflow
 
-Workflows are started by you, normally with the skills:
+Workflows are started by you, normally with:
 
 * /grill-with-docs (new feature)
 * /diagnosing-bugs (fix a bug)
 * /improve-codebase-architecture (cleanup your slop)
 * /wayfinder (large amount of work)
+* a conversation without explicit skill invocation
 
 Work discussed is then converted to a spec by you or the agent
 
 * /to-spec
 
-After a spec is generated, it can be broken down into slices with
+After a spec is generated, it can be broken down into slices and published with
 
 * /to-tickets
 
@@ -115,10 +103,22 @@ The override of /implement adds the concept of an Implementation Plan. The spec 
 An Implementation Plan is detailed, and is generated at the start of the implementation. This can be done in plan mode by a smarter agent (Opus/Fable).
 After the plan is approved a more efficient agent (Sonnet) can take over.
 
+### Model selection
+
+An `implementer` agent is included that actually writes the code.
+This agent uses Sonnet (with Claude).
+A `planner` agent uses Opus.
+
+If you want another intervention point in the workflow, use planning.
+With permission `defaultMode` is separately set to `plan` and 
+the `opusplan` model alias- this can be done in  `.claude/settings.local.json`.
+This requires explicit approval to move between planning and implementation.
+Opus Plan mode helps ensure cost effective module usage by switching between Opus for planning and Sonnet for
+implementation. This workflow already does that via subagents.
+
 #### Agent review at every step
 
-A separate agent reviews both the plan and the code.
-Reviews are adversarial. Follow up reviews are not adversarial.
+A separate agent provides an adversarial review of both the plan and the code.
 
 #### Artifact-based handoffs
 
@@ -179,35 +179,3 @@ This will not work on Claude Code for the Web (cloud) because they block Github 
 There is a /github-actions-ci skill for the purpose of not asking for permission to interact with github actions.
 
 Note that in Codex skills cannot allow list tools- you need to add things allowed by the skill to the permission rules.
-
-### Repository command interface
-
-The stable entry points for GitHub work are `./scripts/gh-app.sh` and
-`./scripts/check-ci-runs.sh`. Their bundled implementations are internal and
-must not be invoked directly. Smoke-test the public interface with:
-
-```text
-workflow skills
-      |
-      v
-./scripts/{gh-app,check-ci-runs}.sh
-      |
-      v
-bundled skill implementations
-```
-
-```sh
-./test/repository-interface.sh
-```
-
-For local validation, run:
-
-```sh
-./test/repository-interface.sh
-./scripts/check-skill-inlines.sh
-git diff --check
-```
-
-The contract needs `jq`, Bash, OpenSSL, and the installed skills named by
-provenance. ShellCheck and optional skill validation need separately installed
-tools; report unavailable tools rather than treating CI as coverage.
