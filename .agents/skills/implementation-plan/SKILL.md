@@ -59,8 +59,14 @@ Convert user stories into concrete tests or verification criteria.
 
 ## Review
 
-Use an independent adversarial reviewer unless the change is trivial. Review
-in this order and incorporate the findings into the plan:
+When delegated by `/implement`, return the draft plan to the orchestrator
+without spawning a nested reviewer. The `/implement` workflow owns the
+fresh-context review artifact. When given that artifact for revision,
+incorporate its findings and return the complete revised plan.
+
+When running outside `/implement`, use an independent adversarial reviewer
+unless the change is trivial. Review in this order and incorporate the findings
+into the plan:
 
 1. **Spec** — completeness and scope.
 2. **Architecture**
