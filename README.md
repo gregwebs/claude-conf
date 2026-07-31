@@ -1,24 +1,25 @@
-AI configuration files to help produce high quality code.
+AI configuration to produce high quality code.
 
 ## Goal
 
 * Increase Agent code quality (fewer defects, stronger code base)
 * Decrease user overview
 
+Downsides
+* It takes AI more time to complete its task
+* Higher cost to initially complete a feature
+  * For a non-prototype you will save costs due to
+    * Fewer defects
+    * A more agile code base
+
 These are achieved by:
-* outlining a workflow that emphasizes specing, planning, testing, and verification
+* outlining a workflow that emphasizes specing, planning, testing, verification, and architecture/design
 * having a separate agent review at every stage
 
 Requirements from you
 * You have to get deeply involved with the planning stage
 * Spend effort on engineering discipline
 
-Possible Downsides
-* It may take significantly longer to complete a feature
-* Cost to initially complete a feature
-  * but for a non-prototype you will save due to
-    * fewer defects
-    * a more agile code base
 
 
 As code quality increases, the agent can do more hands off work for you.
