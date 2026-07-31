@@ -204,11 +204,24 @@ assert_contains .claude/agents/planner.md 'Read and follow the /implementation-p
 assert_contains .codex/agents/planner.toml 'Read and follow the /implementation-plan skill.'
 assert_contains .claude/agents/implementer.md 'Read and follow the Phase 2 - Plan execution section of the /implement skill.'
 assert_contains .codex/agents/implementer.toml 'Read and follow the Phase 2 - Plan execution section of the /implement skill.'
+assert_contains .agents/skills/implement/SKILL.md 'fork_turns="none"'
+assert_contains .agents/skills/implement/SKILL.md 'task-brief.md'
+assert_contains .agents/skills/implement/SKILL.md 'implementation-plan.md'
+assert_contains .agents/skills/implement/SKILL.md 'plan-review.md'
+assert_contains .agents/skills/implement/SKILL.md 'implementation-result.md'
+assert_contains .agents/skills/implement/SKILL.md 'code-review.md'
+assert_contains README.md '#### Artifact-based handoffs'
+assert_contains .agents/skills/implementation-plan/SKILL.md 'without spawning a nested reviewer'
+if rg -q 'Pass the .* output \*\*verbatim\*\*' \
+  "$REPOSITORY_ROOT/.agents/skills/implement/SKILL.md"; then
+  fail 'implement workflow passes planner output inline instead of by artifact'
+fi
 for adapter in \
   .claude/agents/planner.md \
   .claude/agents/implementer.md \
   .codex/agents/planner.toml \
   .codex/agents/implementer.toml; do
+  assert_contains "$adapter" 'delegated by /implement'
   if rg -q '\.agents/skills/(implementation-plan|implement)/SKILL\.md' "$REPOSITORY_ROOT/$adapter"; then
     fail "adapter contains a repository-local skill path: $adapter"
   fi

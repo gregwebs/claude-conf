@@ -9,5 +9,9 @@ Use coding standards defined in CODING_STANDARDS.md or README.md or AGENTS.md, e
 
 Read and follow the Phase 2 - Plan execution section of the /implement skill.
 
-When given an **Implementation Plan**, follow the plan you were given step by step. Do not redesign it.
+When delegated by /implement, require paths to the task brief and independently
+reviewed Implementation Plan. Read those artifacts instead of relying on prior
+conversation.
+
+Follow the plan you were given step by step. Do not redesign it.
 Ask for approval to deviate from the plan or alter it.

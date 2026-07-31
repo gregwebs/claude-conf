@@ -120,6 +120,31 @@ After the plan is approved a more efficient agent (Sonnet) can take over.
 A separate agent reviews both the plan and the code.
 Reviews are adversarial. Follow up reviews are not adversarial.
 
+#### Artifact-based handoffs
+
+Planning, implementation, and review agents start with fresh context instead of
+inheriting the main conversation. The orchestrator carries decisions across
+those seams with task-scoped Markdown artifacts in a temporary directory
+outside the repository:
+
+```text
+task-brief.md
+      |
+      v
+implementation-plan.md <-> plan-review.md
+      |
+      v
+working tree + implementation-result.md
+      |
+      v
+code-review.md
+```
+
+This keeps each agent's interface limited to the work product and source
+references it needs. The artifacts are workflow scratch state, not lasting
+technical documentation, and are never committed. The `/implement` skill owns
+the artifact names and operational handoff rules.
+
 
 #### Agent sends a Pull Request
 
