@@ -253,7 +253,7 @@ assert_contains .agents/skills/breakdown/SKILL.md 'inlined-from:'
 assert_contains .agents/skills/breakdown/SKILL.md '### 4. Quiz the user'
 assert_contains .agents/skills/implementation-plan/SKILL.md 'inlined-from:'
 assert_contains .agents/skills/implementation-plan/SKILL.md '### 2. Identify the spec source'
-for skill in implement to-tickets pull-request github-app github-actions-ci grilling; do
+for skill in implement github-tickets pull-request github-app github-actions-ci grilling; do
   if rg -q 'inlined-from:' "$REPOSITORY_ROOT/.agents/skills/$skill/SKILL.md"; then
     fail "unexpected inline provenance inventory for $skill"
   fi

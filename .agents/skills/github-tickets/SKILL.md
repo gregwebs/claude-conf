@@ -1,24 +1,23 @@
 ---
-name: to-tickets
+name: github-tickets
 description: Break a plan, spec, or conversation into tracer-bullet GitHub issues for this repo, creating a parent tracking issue with sub-issues when publishing multiple tickets.
 disable-model-invocation: true
 metadata:
   short-description: Create project tickets with a parent tracking issue when needed.
 ---
 
-# /to-tickets - project wrapper
+# /github-tickets
 
-This project shadows the personal `to-tickets` skill so multi-ticket breakdowns
+This project builds on top of  the `to-tickets` skill so multi-ticket breakdowns
 are published with a parent tracking issue and native GitHub sub-issue links.
 
 ## Delegate first
 
-Read `~/.agents/skills/to-tickets/SKILL.md`, the base skill's canonical path,
-and follow its full process: gather context, draft vertical slices, quiz the
+Read the `/to-tickets` skill and follow its full process: gather context, draft vertical slices, quiz the
 user, iterate until approved, and publish.
 
-If that base file does not exist on this machine, stop and tell the user the
-personal `to-tickets` skill is missing.
+If that skill does not exist on this machine, stop and tell the user the
+`to-tickets` skill is missing.
 
 ## Publishing override for this repo
 
