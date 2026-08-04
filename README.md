@@ -10,7 +10,7 @@ These are achieved by:
 * having a separate agent review at every stage
 
 Requirements from you
-* You have to get deeply involved with the planning stage
+* Deeply involved with the planning stage
 * Spend effort on engineering discipline
 
 Downsides
@@ -20,9 +20,8 @@ Downsides
     * Fewer defects
     * A more agile code base
 
-
 As code quality increases, the agent can do more hands off work for you.
-This configuration pushes you towards a large investment in alignment and specing via grill-with-docs and then optional involvement after that point.
+This configuration pushes you towards a large investment in alignment via /grilling and then optional involvement after that point.
 If configured and allowed, the agent can send Pull Requests, and you can decide how closesly to review them.
 
 ## Docs
@@ -44,7 +43,7 @@ You customize things for your repo by editing
   * CONTRIBUTING.md (for how to run and test the project)
   * USAGE.md - if you have a public interface to document
 
-### Base
+### Installing
 
 This relies heavily on mattpocock/skills.
 
@@ -52,24 +51,14 @@ This relies heavily on mattpocock/skills.
 npx skills@latest add mattpocock/skills
 ```
 
-These skills should be installed to your home directory.
-That makes it easy to adjust the skills by inheriting them.
-This repo does just that.
-If you install mattpocock/skills local to your project then you will need to rename the skills from this repo that are overriding mattpocock/skills.
+You can install these skills to your home directory (~/.agents/skills).
+However, to override those skills with ones from this repo with the same name (/grilling, /implement),
+you will need to install to a different location (I suggest cloning the repo).
+Then you can symlink from ~/.agents/skills to mattpocock skills and/or skills in this repo.
 
-### Instruction ownership and provenance
+Alternatively you can install/override skills in an individual project.
 
-Skills that copy or behaviorally adapt upstream sections declare
-`metadata.inlined-from`: an absolute or `~/` upstream `SKILL.md`, exact parent
-heading, scope SHA-256, and source/local heading pairs. Context pointers,
-delegation, and locally owned replacements are not inlining.
-
-Run `./scripts/check-skill-inlines.sh` to validate all tracked records, or pass
-specific `SKILL.md` paths for fixtures. On drift, review the named upstream
-scope and local components, port or intentionally decline the behavior, then
-refresh the digest. Parent-scope hashes also detect inserted sibling sections;
-never refresh a digest merely to silence the checker.
-
+The skils in this repo are in [.agents/skills](.agents/skills). /grilling is very experimental.
 
 ## Workflow
 

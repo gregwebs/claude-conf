@@ -14,6 +14,20 @@ Checks for drift are done with
 ./scripts/check-skill-inlines.sh
 ```
 
+### Instruction ownership and provenance
+
+Skills that copy or behaviorally adapt upstream sections declare
+`metadata.inlined-from`: an absolute or `~/` upstream `SKILL.md`, exact parent
+heading, scope SHA-256, and source/local heading pairs. Context pointers,
+delegation, and locally owned replacements are not inlining.
+
+Run `./scripts/check-skill-inlines.sh` to validate all tracked records, or pass
+specific `SKILL.md` paths for fixtures. On drift, review the named upstream
+scope and local components, port or intentionally decline the behavior, then
+refresh the digest. Parent-scope hashes also detect inserted sibling sections;
+never refresh a digest merely to silence the checker.
+
+
 ## Command interface tests
 
 The stable repository entry point for GitHub App work is `./scripts/gh-app.sh`;

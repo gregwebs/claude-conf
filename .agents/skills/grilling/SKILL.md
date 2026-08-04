@@ -1,20 +1,105 @@
 ---
 name: grilling
-description: Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
+description: Grill the user relentlessly - used for planning. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
 ---
 
 Interview the user relentlessly until you reach a shared understanding. Map this as a design tree: every decision branches into the decisions that hang off it.
 
-Every question should also provide your recommended answer. End questions with: "Do you agree with the recommendation?"
+# Recommendation
 
-Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled or will be settled by a simple "yes" answer. The questions you can ask _now_ without guessing at answers you haven't heard yet other than "yes".
+All questions have a recommended answer.
+Affirming is accepting the recommended answer.
 
-Ask the questions in the round one at a time. Asking multiple questions at once is bewildering.
-Each next question in the round should be asked immediately.
-If the user answers a question with "yes" or if the next question has absolutely no dependency on prior round responses, the round continues. Otherwise the round ends early so you can take time to understand the user's response.
+# Question round
 
-Each round the user answers reshapes the tree — settled decisions push the frontier outward and unblock questions that depended on them. Recompute the frontier and ask the next round. A question whose answer depends on another question (other than a simple "yes") still open in this round belongs to a _later_ round, not this one.
+The design tree is worked in **rounds**, a set of questions on a related subject.
 
-Finding facts is your job, never the user's. When a frontier question needs a fact from the environment (filesystem, tools, etc.), dispatch a sub-agent to find it — don't ask the user for anything you could look up yourself. Don't block on it: a running exploration is an unsettled prerequisite, so only the questions downstream of it wait for the sub-agent to report — ask the rest of the frontier now. The decisions are the user's — put each to them and wait.
+Questions are identified to the user as ${round_id}.${question_id}. Example session:
+* Q: 1.1, A: yes
+* Q: 1.2, A: No
+* Q: 2.1, etc
+
+# Your job on the main thread
+
+Utilize a separate persistent sub-agent thread to analyze the project and generate questions.
+This allows the subagent to come up with the next questions for the round while you are waiting for the user to answer the current question.
+Your job is solely to manage the user's grilling session Q&A experience.
+The sub-agent will first be tasked with asking the first design question. After that, it will receive user answers and generate new questions.
+
+When presenting a question without any selector menu, always end with "Do you agree with the recommendation?"
+If the user's answer is "y", "Y", "Yes", "yes", or "YES!", the recommendation is affirmed.
+If you present a selector menu for the user, the recommendation should be default selected response.
+
+Your first priority to present questions with low latency. After launching the sub-agent, your workflow will be:
+
+* Find your next question 
+  * If the user affirmed the previous question in the round, and the next question for the round is available, use it immediately
+  * Otherwise wait for a next question from the sub-agent
+    * While waiting, you can tell the user relevant information that is not part of a question- make it clear that this is not a question.
+* Ask a question to the user
+* Wait for user's answer
+  * While waiting, check for new sub-agent responses
+* User answers
+* Asynchronously send the response to the sub-agent. Do not wait for a reply.
+    
+
+# Communication protocol
+
+## Ids
+
+Ids should use letters rather than numbers.
+This distinguishes internal communication from user presentation.
+
+## Answers
+
+includes
+* id
+* text
+* recommendation text
+* recommended (boolean)
+
+## sub-agent -> main: question
+
+includes
+* round id
+* question id
+* subject/overview
+* question text
+* answers
+
+## main -> sub-agent: answer
+
+includes
+* round id
+* question id
+* recommendation affirmed (boolean)
+* answer id (use "N/A" for no answer selected)
+* the user's literal answer
+
+# Sub-agent job
+
+* generate a new question
+* send the new question back asynchronously to the main agent immediately if
+  * the question is for the current round and is part of a sequence of affirmative responses
+  * the use just completed the prior round and this question is for the new round
+  * otherwise, maintain the question locally to be sent later
+* check for any new answers, but do not wait unless you are done generating future questions
+
+## Question generation
+
+Each round the user answers reshapes the tree — settled decisions push the frontier outward and unblock questions that depended on them.
+
+Finding facts is your job, never the user's. When a frontier question needs a fact from the environment (filesystem, tools, etc.), find it — don't ask the user for anything you could look up yourself.
 
 The session is done when the frontier is empty: every branch of the design tree visited, nothing left silently assumed. Do not act on it until the user confirms you have reached a shared understanding.
+
+### Next question for the round
+
+Prioritize generating new questions for the current round that assume an affirmation. You should generate 3 additional questions into the round unless the round is coming to an end.
+
+If an unanswered question in the current round has multiple good candidate answers then you can generate questions that will be used for non-affirmative answers.
+
+### Next question for future rounds
+
+When you have completed generating next questions for the current round, generate questions for the most likely next round. Follow instructions for the current round.
+Next round questions are stored locally and not communicated back to the main agent until the current round completes.
