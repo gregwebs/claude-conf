@@ -69,7 +69,8 @@ if [ -r "$github_app_secrets_dir/client-id" ] \
     echo "check-ci-runs: GitHub App token helper not found: $TOKEN_HELPER" >&2
     exit 1
   fi
-  # shellcheck disable=SC1091
+  # TOKEN_HELPER is resolved relative to this script, so the dynamic source is intentional.
+  # shellcheck disable=SC1090
   source "$TOKEN_HELPER"
   github_app_auth=true
 fi

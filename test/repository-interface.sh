@@ -99,7 +99,7 @@ ${local_body}"
 run_inline_fixtures() {
   local fixture_root source skill digest
   fixture_root=$(mktemp -d "$TEMP_ROOT/claude-conf-inline.XXXXXX")
-  trap "rm -rf '$fixture_root'" EXIT
+  trap 'rm -rf "$fixture_root"' EXIT
   source="$fixture_root/upstream.md"
   skill="$fixture_root/SKILL.md"
 
@@ -217,8 +217,12 @@ assert_contains .agents/skills/implement/SKILL.md 'implementation-result.md'
 assert_contains .agents/skills/implement/SKILL.md 'code-review.md'
 assert_contains README.md '#### Artifact-based handoffs'
 assert_contains .agents/skills/implementation-plan/SKILL.md 'without spawning a nested reviewer'
+# This assertion intentionally searches for the literal skill-directory expression.
+# shellcheck disable=SC2016
 assert_contains .agents/skills/github-actions-ci/SKILL.md \
   'allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/check-ci-runs.sh *)'
+# This assertion intentionally searches for the literal command substitution.
+# shellcheck disable=SC2016
 assert_contains .agents/skills/github-actions-ci/scripts/check-ci-runs.sh \
   'REPO_ROOT="$(git rev-parse --show-toplevel)"'
 if rg -q 'Pass the .* output \*\*verbatim\*\*' \

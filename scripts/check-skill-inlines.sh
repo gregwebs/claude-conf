@@ -13,6 +13,8 @@ else
 fi
 CHECK_TEMP_ROOT=$(mktemp -d "$CHECK_TEMP_PARENT/check-skill-inlines.XXXXXX") || exit 1
 
+# Invoked indirectly by the EXIT trap below.
+# shellcheck disable=SC2329
 cleanup() {
   if [ -n "${CHECK_TEMP_ROOT:-}" ] && [ -d "$CHECK_TEMP_ROOT" ]; then
     rm -rf "$CHECK_TEMP_ROOT"
@@ -503,7 +505,7 @@ check_group() {
 
   if [[ "$group_source" == /* ]]; then
     upstream_path="$group_source"
-  elif [[ "$group_source" == '~/'* ]]; then
+  elif [[ "$group_source" == \~/* ]]; then
     if [ -z "${HOME:-}" ]; then
       fail_check "$skill_display" "cannot expand source without HOME: $group_source"
       return
