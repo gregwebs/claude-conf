@@ -14,20 +14,17 @@ Checks for drift are done with
 ./scripts/check-skill-inlines.sh
 ```
 
-## Repository command interface tests
+## Command interface tests
 
-The stable entry points for GitHub work are `./scripts/gh-app.sh` and
-`./scripts/check-ci-runs.sh`. Their bundled implementations are internal and
-must not be invoked directly. Smoke-test the public interface with:
+The stable repository entry point for GitHub App work is `./scripts/gh-app.sh`;
+its bundled implementation is internal and must not be invoked directly. The
+GitHub Actions skill exposes its bundled checker directly through
+`${CLAUDE_SKILL_DIR}/scripts/check-ci-runs.sh`, so target repositories do not
+need to provide a wrapper. Smoke-test these interfaces with:
 
 ```text
-workflow skills
-      |
-      v
-./scripts/{gh-app,check-ci-runs}.sh
-      |
-      v
-bundled skill implementations
+/github-app        -> ./scripts/gh-app.sh -> bundled dispatcher
+/github-actions-ci -> bundled ${CLAUDE_SKILL_DIR}/scripts/check-ci-runs.sh
 ```
 
 ```sh

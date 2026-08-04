@@ -4,7 +4,7 @@ set -euo pipefail
 
 REPOSITORY_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 GITHUB_DISPATCHER="$REPOSITORY_ROOT/scripts/gh-app.sh"
-CI_CHECKER="$REPOSITORY_ROOT/scripts/check-ci-runs.sh"
+CI_CHECKER="$REPOSITORY_ROOT/.agents/skills/github-actions-ci/scripts/check-ci-runs.sh"
 INLINE_CHECKER="$REPOSITORY_ROOT/scripts/check-skill-inlines.sh"
 
 fail() {
@@ -25,6 +25,10 @@ assert_executable() {
 
 assert_readable() {
   [ -r "$1" ] || fail "expected readable dependency: $1"
+}
+
+assert_absent() {
+  [ ! -e "$1" ] || fail "expected absent path: $1"
 }
 
 assert_tracked() {
@@ -192,6 +196,7 @@ assert_json '.permissions.defaultMode' 'plan'
 
 assert_executable "$GITHUB_DISPATCHER"
 assert_executable "$CI_CHECKER"
+assert_absent "$REPOSITORY_ROOT/scripts/check-ci-runs.sh"
 assert_readable "$REPOSITORY_ROOT/.agents/skills/github-app/scripts/gh-app-token.sh"
 
 for tracked_path in \
@@ -212,6 +217,10 @@ assert_contains .agents/skills/implement/SKILL.md 'implementation-result.md'
 assert_contains .agents/skills/implement/SKILL.md 'code-review.md'
 assert_contains README.md '#### Artifact-based handoffs'
 assert_contains .agents/skills/implementation-plan/SKILL.md 'without spawning a nested reviewer'
+assert_contains .agents/skills/github-actions-ci/SKILL.md \
+  'allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/check-ci-runs.sh *)'
+assert_contains .agents/skills/github-actions-ci/scripts/check-ci-runs.sh \
+  'REPO_ROOT="$(git rev-parse --show-toplevel)"'
 if rg -q 'Pass the .* output \*\*verbatim\*\*' \
   "$REPOSITORY_ROOT/.agents/skills/implement/SKILL.md"; then
   fail 'implement workflow passes planner output inline instead of by artifact'
@@ -292,6 +301,11 @@ if rg -n '\./scripts/github/|gh-app-[a-z-]+\.sh' \
   "$REPOSITORY_ROOT/.agents/skills" \
   --glob 'SKILL.md'; then
   fail 'workflow skills bypass the public scripts interface'
+fi
+if rg -n '\./scripts/check-ci-runs\.sh' \
+  "$REPOSITORY_ROOT/.agents/skills" \
+  --glob 'SKILL.md'; then
+  fail 'workflow skills expect a repository-local CI checker'
 fi
 
 echo 'repository interface contract passed'

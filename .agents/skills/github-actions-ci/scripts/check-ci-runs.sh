@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
 # Report GitHub Actions check runs for a commit.
 #
-# Usage: ./scripts/check-ci-runs.sh [--wait] [--job JOB_NAME] [COMMIT]
+# Usage: check-ci-runs.sh [--wait] [--job JOB_NAME] [COMMIT]
 # COMMIT defaults to HEAD. With --wait, poll until the selected check runs complete.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel)"
 TOKEN_HELPER="$SCRIPT_DIR/../../github-app/scripts/gh-app-token.sh"
 
 usage() {
-  echo "usage: $0 [--wait] [--job JOB_NAME] [COMMIT]" >&2
+  echo "usage: check-ci-runs.sh [--wait] [--job JOB_NAME] [COMMIT]" >&2
 }
 
 wait_for_result=false
@@ -49,6 +48,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 
+REPO_ROOT="$(git rev-parse --show-toplevel)"
 sha=$(git -C "$REPO_ROOT" rev-parse "$commit")
 origin=$(git -C "$REPO_ROOT" config --get remote.origin.url)
 repo=${origin#*github.com[:/]}

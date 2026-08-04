@@ -177,5 +177,7 @@ This will not work on Claude Code for the Web (cloud) because they block Github 
 ### Github Actions CI
 
 There is a /github-actions-ci skill for the purpose of not asking for permission to interact with github actions.
+Its check-run helper is bundled and allow-listed with `${CLAUDE_SKILL_DIR}`, so
+the repository being checked does not need its own CI wrapper script.
 
 Note that in Codex skills cannot allow list tools- you need to add things allowed by the skill to the permission rules.

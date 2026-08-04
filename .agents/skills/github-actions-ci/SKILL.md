@@ -1,12 +1,12 @@
 ---
 name: github-actions-ci
-description: Monitor, wait for, and diagnose this repository's GitHub Actions checks with ./scripts/check-ci-runs.sh. Use after pushing or opening/updating a PR, when asked to watch CI or verify a named job such as Playwright, or when a GitHub Actions check fails.
-allowed-tools: Bash(./scripts/check-ci-runs.sh)
+description: Monitor, wait for, and diagnose a repository's GitHub Actions checks with the skill's bundled helper. Use after pushing or opening/updating a PR, when asked to watch CI or verify a named job such as Playwright, or when a GitHub Actions check fails.
+allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/check-ci-runs.sh *)
 ---
 
 # GitHub Actions CI
 
-Use the tracked helper as the single interface for check-run status. It selects
+Use the bundled helper as the single interface for check-run status. It selects
 the host-compatible curl binary, resolves the repository and commit, and uses
 GitHub App authentication when local App credentials are available.
 
@@ -15,16 +15,16 @@ GitHub App authentication when local App credentials are available.
 Run one of these stable command shapes from the repository root:
 
 ```sh
-./scripts/check-ci-runs.sh
-./scripts/check-ci-runs.sh --wait
-./scripts/check-ci-runs.sh --job JOB --wait
-./scripts/check-ci-runs.sh --job JOB --wait COMMIT
+${CLAUDE_SKILL_DIR}/scripts/check-ci-runs.sh
+${CLAUDE_SKILL_DIR}/scripts/check-ci-runs.sh --wait
+${CLAUDE_SKILL_DIR}/scripts/check-ci-runs.sh --job JOB --wait
+${CLAUDE_SKILL_DIR}/scripts/check-ci-runs.sh --job JOB --wait COMMIT
 ```
 
 The stable approval prefix is:
 
 ```text
-./scripts/check-ci-runs.sh
+${CLAUDE_SKILL_DIR}/scripts/check-ci-runs.sh
 ```
 
 ## Rerun failed jobs
@@ -44,7 +44,8 @@ The stable approval prefix is:
 
 Use the workflow run ID from the failed job URL. This reruns only failed jobs;
 it does not create a new workflow run or rerun successful jobs. Monitor the
-replacement checks with `./scripts/check-ci-runs.sh --wait COMMIT`.
+replacement checks with
+`${CLAUDE_SKILL_DIR}/scripts/check-ci-runs.sh --wait COMMIT`.
 
 GitHub requires network access. In a restricted Codex sandbox, request network
 escalation on the first call using that narrow prefix. Do not probe with raw
