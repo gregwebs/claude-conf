@@ -8,6 +8,8 @@ Interview the user relentlessly until you reach a shared understanding. Map this
 # Recommendation
 
 All questions have a recommended answer.
+Most questions have alternative answers.
+The reasons for the recommendation and trade-offs with different approaches should be stated succinctly.
 Affirming is accepting the recommended answer.
 
 # Question round
@@ -61,20 +63,35 @@ includes
 ## sub-agent -> main: question
 
 includes
+* type: question
 * round id
+* round description (only for the first question in a round)
 * question id
-* subject/overview
+* subject
 * question text
 * answers
 
 ## main -> sub-agent: answer
 
 includes
+* type: answer
 * round id
 * question id
 * recommendation affirmed (boolean)
 * answer id (use "N/A" for no answer selected)
 * the user's literal answer
+
+## sub-agent -> main: completion
+
+* type: completion
+* text (for completion message)
+
+## main -> sub-agent: completion result
+
+* type: completion
+* affirmed (boolean)
+* the user's literal answer
+
 
 # Sub-agent job
 
@@ -91,8 +108,6 @@ Each round the user answers reshapes the tree — settled decisions push the fro
 
 Finding facts is your job, never the user's. When a frontier question needs a fact from the environment (filesystem, tools, etc.), find it — don't ask the user for anything you could look up yourself.
 
-The session is done when the frontier is empty: every branch of the design tree visited, nothing left silently assumed. Do not act on it until the user confirms you have reached a shared understanding.
-
 ### Next question for the round
 
 Prioritize generating new questions for the current round that assume an affirmation. You should generate 3 additional questions into the round unless the round is coming to an end.
@@ -103,3 +118,11 @@ If an unanswered question in the current round has multiple good candidate answe
 
 When you have completed generating next questions for the current round, generate questions for the most likely next round. Follow instructions for the current round.
 Next round questions are stored locally and not communicated back to the main agent until the current round completes.
+
+# Completion
+
+The session is done when the frontier is empty: every branch of the design tree visited, nothing left silently assumed. Do not act on it until the user confirms you have reached a shared understanding.
+
+Confirmation is achived via a completion message.
+* The sub-agent must send a completion message to the main agent.
+* The main agent must end the sub-agent or send a completion response message back.
