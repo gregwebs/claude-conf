@@ -69,11 +69,7 @@ Separate out any verifications from `implementation-plan.md` and `implementation
 
 ## Phase 3 - Review
 
-Delegate `/code-review-with-followup` to a `planner` sub-agent review
-
-### sub-agent review instructions
-
-Perform an adversarial review using these files:
+Perform `/code-review-with-followup` using these files:
 * `task-brief.md`
 * `implementation-plan.md`
 * `implementation-result.md`

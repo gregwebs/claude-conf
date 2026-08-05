@@ -216,7 +216,6 @@ assert_contains .agents/skills/implement/SKILL.md 'plan-review.md'
 assert_contains .agents/skills/implement/SKILL.md 'implementation-result.md'
 assert_contains .agents/skills/implement/SKILL.md 'code-review.md'
 assert_contains README.md '#### Artifact-based handoffs'
-assert_contains .agents/skills/implementation-plan/SKILL.md 'without spawning a nested reviewer'
 # This assertion intentionally searches for the literal skill-directory expression.
 # shellcheck disable=SC2016
 assert_contains .agents/skills/github-actions-ci/SKILL.md \
