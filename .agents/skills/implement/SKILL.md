@@ -69,34 +69,25 @@ Separate out any verifications from `implementation-plan.md` and `implementation
 
 ## Phase 3 - Review
 
-Delegate `/code-review` to an reviewer sub-agent reviewer with instructions to perform an adversarial review using these files:
+Delegate `/code-review-with-followup` to a `planner` sub-agent review
+
+### sub-agent review instructions
+
+Perform an adversarial review using these files:
 * `task-brief.md`
 * `implementation-plan.md`
 * `implementation-result.md`
 * `verifications.md`
-Persist its findings as `code-review.md`.
 
-### Changes required
-
-Follow this section if changes are required from the code review.
-
-Give a fresh `implementer` sub-agent only
-* `task-brief.md`
-* `implementation-plan.md`
-* `code-review.md`
-
-Ask the `implementer` to
-* make changes and provide an explanation for them as `code-review-followup.md`
-* add any new verifications to `verifications.md`.
-
-Have the reviewer sub-agent perform a non-adverarial followup review for `code-review-followup.md` and a diff of the followup changes that were made.
-
+During the review, add any new requested verifications to `verifications.md`.
+Update `implementation-result.md` according to changes made from the code review.
 
 ## Phase 3 - Verification
 
 Delegate to a fresh `implementer` sub-agent to perform required verifications. They should have access to
 * `task-brief.md`
 * `implementation-plan.md`
+* `implementation-result.md`
 * `verifications.md`
 
 ### implementer sub-agent
