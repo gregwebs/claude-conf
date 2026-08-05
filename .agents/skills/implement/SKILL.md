@@ -5,14 +5,17 @@ description: "Implement a piece of work based on a spec or set of tickets."
 
 # Overview
 
-This repository owns this workflow locally. It adds a detailed planning phase,
-independent review, a user approval gate, and a Change Record.
+Implement a change with planning and reviewing.
 
 # Agent Delegation
 
+Orchestrate subagents to minimize context and cost.
+The `planner` subagent is smarter and more costly and produces the design.
+The `implementer` subagent implements the plan and is designed to lower costs.
+Artifacts are passed between agents with the goal that agents start with a summary of all useful information from other agents. Re-exploration should be minimized, although it is needed for independent reviews and for the implementer to go into further detail.
+
 If the required planner or implementer delegation is unavailable, stop after
-planning and ask the user for an implementer/model handoff. Do not execute the
-plan inline on the planning model.
+planning and ask the user for an implementer/model handoff (the /handoff skill may be available). Do not execute the plan inline on the planning model.
 
 Use artifacts at every delegation seam. At the start of the workflow, create a
 task-scoped temporary directory outside the repository. Do not commit its

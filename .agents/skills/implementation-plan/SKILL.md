@@ -44,18 +44,24 @@ If it does not, explain the split needed and suggest `/to-tickets`;
 
 ## What to include
 
-The plan must give an implementer enough detail to execute without redesign:
+The plan must give an implementer enough detail to execute without redesign.
 
-- detailed file-level changes, including paths and snippets where useful
-- an ordered checklist
-- tests and manual verifications
-- documentation updates
-- a pre-agreed TDD seam, or an explanation of why automated tests do not apply
-- a state diagram for runtime state changes, or an explicit statement of no runtime
-  state changes;
+High-level details:
+- architectural overview
 - the assumptions, failure modes, and relevant standards constraints.
+- a diagram, table, or detailed description of changes in
+  * connections
+  * state transitions
+- a pre-agreed TDD seam, or an explanation of why automated tests do not apply
 
-Convert user stories into concrete tests or verification criteria.
+Low-level details:
+- detailed file-level type and function signature changes, including snippets for important non-obvious ideas
+- tests to implement
+- verifications to perform
+- documentation updates
+- a task checklist
+
+Convert user stories into concrete tests or manual verification criteria.
 
 ## Review
 
