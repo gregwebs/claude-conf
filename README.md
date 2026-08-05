@@ -98,12 +98,14 @@ An `implementer` agent is included that actually writes the code.
 This agent uses Sonnet (with Claude).
 A `planner` agent uses Opus.
 
-If you want another intervention point in the workflow, use planning.
-With permission `defaultMode` is separately set to `plan` and 
+If you have a very simple task that you want to oversee, you can just use /plan.
+In claude, With permission `defaultMode` is separately set to `plan` and 
 the `opusplan` model alias- this can be done in  `.claude/settings.local.json`.
 This requires explicit approval to move between planning and implementation.
-Opus Plan mode helps ensure cost effective module usage by switching between Opus for planning and Sonnet for
-implementation. This workflow already does that via subagents.
+Opus Plan mode helps ensure cost effective module usage by switching between Opus for planning and Sonnet for implementation.
+
+The workflow in this repo does an automatic planning mode (no user approval required)- this works if you already aligned with the /grill-with-docs.
+
 
 #### Agent review at every step
 
@@ -111,35 +113,12 @@ A separate agent provides an adversarial review of both the plan and the code.
 
 #### Artifact-based handoffs
 
-Planning, implementation, and review agents start with fresh context instead of
-inheriting the main conversation. The orchestrator carries decisions across
-those seams with task-scoped Markdown artifacts in a temporary directory
-outside the repository:
-
-```text
-task-brief.md
-      |
-      v
-implementation-plan.md <-> plan-review.md
-      |
-      v
-working tree + implementation-result.md
-      |
-      v
-code-review.md
-```
-
-This keeps each agent's interface limited to the work product and source
-references it needs. The artifacts are workflow scratch state, not lasting
-technical documentation, and are never committed. The `/implement` skill owns
-the artifact names and operational handoff rules.
-
+The `/implement` skill starts planning, implementation, and review agents with fresh context instead of inheriting the main conversation.
+The orchestrator points agents to task-scoped Markdown artifacts in a temporary directory outside the repository.
 
 #### Agent sends a Pull Request
 
-Commit.
-PR, and check on CI- this is Github specific and conditional on setting up access and instructing in AGENTS.md/CLAUDE.md to send a PR.
-
+A /pull-request skill is provided. This is Github specific and conditional on setting up access and instructing in AGENTS.md/CLAUDE.md to send a PR.
 
 ## Engineering discipline
 
@@ -151,9 +130,10 @@ But the rest is largely project specific and is up to you to specify in your doc
 ## Security
 
 We want to let the agent do safe operations without prompting us- prompt fatigue creates security risks.
-The agent should be operating in an isolated sandbox.
-The agent should be a separate user on your computer- either a separate Unix user or a container/VM user.
-Have the agent write code (scripts) for common workflows and commit those.
+
+The agent should operate as a separate OS user in an isolated sandbox (VM/container) with network access restricted.
+
+Otherwise you will need to use the harness (claude code) sandboxing to carefully allow specific commands. Have the agent write code (scripts) for common workflows and commit those.
 
 ### Github
 
