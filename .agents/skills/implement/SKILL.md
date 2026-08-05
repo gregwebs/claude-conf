@@ -24,6 +24,8 @@ artifact. Pass absolute artifact paths between agents:
 - `plan-review.md`: adversarial plan findings
 - `implementation-result.md`: changed files and verification performed
 - `code-review.md`: implementation review findings
+- `code-review-followup.md`: implementation review followup findings
+- `verifications.md`: verifications to be performed
 
 Start every planner, reviewer, and implementer delegation without inherited
 conversation history. In Codex use `fork_turns="none"`; use the equivalent
@@ -39,37 +41,73 @@ Create `task-brief.md`, then delegate planning to a fresh `planner` subagent
 using `/implementation-plan`. Give it the task brief path and any durable source
 paths. Persist its output as `implementation-plan.md`.
 
-Delegate an independent review to a fresh reviewer with only the task brief and
-plan paths. Review in Spec → Architecture → Quality order and persist the
-findings as `plan-review.md`. Give a fresh planner those three artifact paths,
-then replace `implementation-plan.md` with the revised output.
-
 ## Phase 2 - Plan execution
 
-Delegate to a fresh `implementer` with only the `task-brief.md` and
-`implementation-plan.md` paths. Do not redesign the independently reviewed
-plan. Persist the implementer's final report as `implementation-result.md`.
+Delegate to a fresh `implementer` sub-agent with only
+* `task-brief.md`
+* `implementation-plan.md`
+
+### implementer sub-agent
+
+Read the `task-brief.md` and `implementation-plan.md` paths. Do not redesign the plan.
 
 Use /tdd where possible, at pre-agreed seams.
 
 Run typechecking regularly, single test files regularly, and the full test suite once at the end.
 
-Don't document *what* code does. Write new code to make what it does self-documenting.
+Don't document *what* code does. Write new code to make what it self-documenting. For example, extract code to a function with a descriptive name.
 When appropriate document *why* code does what it does due to a requirement or in preference to an alternative.
 
-Once done, delegate `/code-review` to a fresh reviewer with the task brief,
-plan, implementation result, and fixed-point reference. Persist its findings as
-`code-review.md`. If changes are required, give a fresh implementer only the
-task brief, plan, and code review paths, then run a non-adversarial follow-up
-review from artifacts.
+STOP executing immediately when
+* Plan has critical gaps
+* You don't understand an instruction
+* Verification fails repeatedly
+
+Persist a final report as `implementation-result.md`.
+
+Separate out any verifications from `implementation-plan.md` and `implementation-result.md` as `verifications.md`.
+
+## Phase 3 - Review
+
+Delegate `/code-review` to an reviewer sub-agent reviewer with instructions to perform an adversarial review using these files:
+* `task-brief.md`
+* `implementation-plan.md`
+* `implementation-result.md`
+* `verifications.md`
+Persist its findings as `code-review.md`.
+
+### Changes required
+
+Follow this section if changes are required from the code review.
+
+Give a fresh `implementer` sub-agent only
+* `task-brief.md`
+* `implementation-plan.md`
+* `code-review.md`
+
+Ask the `implementer` to
+* make changes and provide an explanation for them as `code-review-followup.md`
+* add any new verifications to `verifications.md`.
+
+Have the reviewer sub-agent perform a non-adverarial followup review for `code-review-followup.md` and a diff of the followup changes that were made.
+
 
 ## Phase 3 - Verification
 
+Delegate to a fresh `implementer` sub-agent to perform required verifications. They should have access to
+* `task-brief.md`
+* `implementation-plan.md`
+* `verifications.md`
+
+### implementer sub-agent
+
 Verify manually that the changes work as expected in an e2e end user setting.
 Test edge cases and failure modes in addition to the happy path.
-Look at the **Implementation Plan** for verification tests to perform.
+Look at `verifications.md` for verification tests to perform.
 
 Consider whether any manual verification steps can and should be added as automated tests.
+Write these additional tests.
+
 Don't make any changes to data that cannot be undone.
 If possible work against a backup of data or seed data.
 
