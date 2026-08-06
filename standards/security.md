@@ -1,3 +1,5 @@
+# Security 
+
 Look for security vulnerabilities in newly written code so that we can fix them before the code is committed to main.
 Below is a non-exhaustive list of reminders/preferences around certain security practices.
 

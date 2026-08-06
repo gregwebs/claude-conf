@@ -1,3 +1,5 @@
+# Go
+
 ## Error handling
 
 Always handle errors. Logging errors is not handling them. There are few exceptions:
