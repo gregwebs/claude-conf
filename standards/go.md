@@ -40,8 +40,8 @@ Avoid nesting code; keep the "happy path" to the left
 ### Context
 
 Accept `context.Context` as first parameter in functions that perform I/O or long-running operations.
-Do not store contexts in structs or pass nil.
-Avoid storing values in the context unless the value is (request) scoped.
+Do not store contexts in structs or pass a nil context.
+Avoid storing values in the context unless the value should be (request) scoped for context usage.
 
 ### Logging
 
