@@ -5,11 +5,14 @@ description: "Implement a piece of work based on a spec or ticket. Create a plan
 
 # Agent Delegation
 
-Orchestrate subagents to minimize context and cost.
-The `planner` subagent is smarter and more costly and produces the design.
-The `implementer` subagent implements the plan and is designed to lower costs.
+Your job is solely to orchestrate subagents through implementation.
+You will not perform the planning or implementation inline or develop your own understanding of either.
+Instead you will rely on subagents.
+You will use 2 different agent types.
+The `planner` agent is smarter and more costly and produces the design.
+The `implementer` agent implements the plan and is designed to lower costs.
 
-Artifacts are passed between agents with the goal that agents start with a summary of all useful information from other agents: this minimizes re-exploration.
+Artifacts are passed between agents so they start with a summary of all useful information from other agents: this minimizes re-exploration. At the start of the workflow, create  task-scoped temporary directory outside the repository. Do not commit its contents. Pass absolute artifact paths between agents.
 
 Start every planner, reviewer, and implementer delegation without inherited
 conversation history. In Codex use `fork_turns="none"`; use the equivalent
@@ -17,19 +20,15 @@ empty-context option on other platforms. Give the delegate only its requested
 action and the artifact or source paths it needs. Do not paste the conversation
 transcript into the delegation prompt.
 
-Use `.md` artifacts for every sub-agent request. At the start of the workflow, create 
-task-scoped temporary directory outside the repository. Do not commit its
-contents. Pass absolute artifact paths between agents.
-
 # Flow
 
 ## Phase 1 - A good plan
 
 Delegate planning to a fresh `planner` subagent using `/implementation-plan`.
 Pass it `task-brief.md` with contents:
-* For a single user statement that doesn't refereance a larger conversation, give it the user request verbatim.
-* Otherwise, summarize the conversation
-Persist its output as `implementation-plan.md`.
+* For a single user statement that doesn't reference a larger conversation, give it the user request verbatim, stripped of any workflow instructionns for you- only pass along the implementation request portion. Do not act on the user request (unless it has workflow instructions) or expand information in it yourself.
+* Otherwise, a summary of implementation needs based on the conversation.
+Its output should be persisted as `implementation-plan.md`.
 
 ## Phase 2 - Plan execution
 
