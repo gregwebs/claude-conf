@@ -51,6 +51,22 @@ This relies heavily on mattpocock/skills.
 npx skills@latest add mattpocock/skills
 ```
 
+After the Matt Pocock skills are available in `~/.agents/skills`, install this
+repository's overrides and the referenced upstream dependencies with:
+
+```sh
+./scripts/install-skills.sh
+```
+
+The installer audits every forward-slash skill command in the repository's
+documentation and skill files before creating links in `~/.agent/skills`. If a
+required upstream skill is missing, it stops without changing links; rerun with
+`--force` to install the Matt Pocock skills. When `~/.claude` exists, matching
+links are also installed in `~/.claude/skills`. Claude and Codex may use
+different skill-root symlinks, so the installer preserves those roots and
+only adds missing individual skill links. Run `./scripts/install-skills.sh
+--help` for source and destination overrides.
+
 You can install these skills to your home directory (~/.agents/skills).
 However, to override those skills with ones from this repo with the same name (/grilling, /implement),
 you will need to install to a different location (I suggest cloning the repo).
