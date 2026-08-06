@@ -1,13 +1,14 @@
 ---
 name: implement
-description: "Implement a piece of work based on a spec or ticket. Create a plan. Review the plan and changes."
+description: "Implement a piece of work based on a spec or ticket with the flow: Plan -> Execute -> Review -> Verify -> Completion"
 ---
 
 # Agent Delegation
 
-Your job is solely orchestrate subagents through implementation according to this skill.
-Do not perform the planning or implementation inline or develop your own understanding of either.
+Your job is solely to orchestrate subagents through implementation according to this skill.
+Do not perform the planning or implementation inline or develop your own detailed understanding of either.
 At most you will do simple checks/verifications between handoffs.
+Any modifications to the workflow must be approved by the user.
 
 You will rely on sub-agents using 2 different agents:
 The `planner` agent is smarter and more costly and produces the design.
