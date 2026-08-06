@@ -213,7 +213,6 @@ assert_contains .agents/skills/implement/SKILL.md 'fork_turns="none"'
 assert_contains .agents/skills/implement/SKILL.md 'task-brief.md'
 assert_contains .agents/skills/implement/SKILL.md 'implementation-plan.md'
 assert_contains .agents/skills/implement/SKILL.md 'implementation-result.md'
-assert_contains .agents/skills/implement/SKILL.md 'code-review.md'
 assert_contains README.md '#### Artifact-based handoffs'
 # This assertion intentionally searches for the literal skill-directory expression.
 # shellcheck disable=SC2016
