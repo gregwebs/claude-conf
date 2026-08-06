@@ -8,18 +8,21 @@ Use property based testing, including smart quickcheck style tests.
 
 Use contracts. If there is not automated contract testing, state contracts as comments in functions.
 
-## DRY
+# Architecture
+
+Consult the `/codebase-design` skill on how to write deep modules
+
+# DRY
 
 Follow the DRY (Don't Repeat Yourself) Principle and Avoid Duplicating Code or Logic.
-Avoid writing the same code more than once. Instead, reuse your code using functions, classes, modules, libraries, or other abstractions.
+* Avoid writing the same code more than once. Instead, reuse your code using functions, classes, modules, libraries, or other abstractions.
+* Check before using copy-paste for new similar functionality — can an existing abstraction can be extended or parameterized first?
+* Maintain a single source of truth for configuration values.
 
-* ALWAYS maintain a single source of truth for configuration values — the same constant or config value defined in two places will diverge and cause bugs.
-* ALWAYS prefer readability over DRY when the abstraction requires indirection that obscures what the code does — a small amount of duplication is often better than an obscure helper.
-* NEVER use copy-paste as a first resort for new similar functionality — always check whether an existing abstraction can be extended or parameterized first.
-
-Caution:
-* Dont' quickly apply DRY to coincidentally similar code that serves different purposes. Unrelated concepts should not be coupled. In this case DRY should require a function that is generic with respect to either concern.
-* It is okay to wait to use a shared abstraction until you have 3 concrete instances of the same logic if the value initially appears low for combining just 2 instances.
+Don't go overboard:
+* Prefer readability over DRY when the abstraction requires indirection that obscures what the code does — a small amount of duplication is often better than an obscure helper.
+* Don't couple unrelated concepts in an attempt to DRY- these can only be served by truly generic functionality
+* It is okay to wait until you have 3 concrete instances of the same logic if the value/work for DRY appears low for just 2 instances.
 
 ## Constants
 
