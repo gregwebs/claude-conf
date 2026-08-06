@@ -5,14 +5,16 @@ description: "Implement a piece of work based on a spec or ticket. Create a plan
 
 # Agent Delegation
 
-Your job is solely to orchestrate subagents through implementation.
-You will not perform the planning or implementation inline or develop your own understanding of either.
-Instead you will rely on subagents.
-You will use 2 different agent types.
+Your job is solely orchestrate subagents through implementation according to this skill.
+Do not perform the planning or implementation inline or develop your own understanding of either.
+At most you will do simple checks/verifications between handoffs.
+
+You will rely on sub-agents using 2 different agents:
 The `planner` agent is smarter and more costly and produces the design.
 The `implementer` agent implements the plan and is designed to lower costs.
+The sub-agents can ask you to interact with the user if needed.
 
-Artifacts are passed between agents so they start with a summary of all useful information from other agents: this minimizes re-exploration. At the start of the workflow, create  task-scoped temporary directory outside the repository. Do not commit its contents. Pass absolute artifact paths between agents.
+Artifacts are passed between sub-agents so they start with a summary of all useful information from other sub-agents: this minimizes re-exploration. Create a task-scoped temporary directory outside the repository. Do not commit its contents. Pass absolute artifact paths between agents.
 
 Start every planner, reviewer, and implementer delegation without inherited
 conversation history. In Codex use `fork_turns="none"`; use the equivalent
@@ -24,11 +26,11 @@ transcript into the delegation prompt.
 
 ## Phase 1 - A good plan
 
-Delegate planning to a fresh `planner` subagent using `/implementation-plan`.
-Pass it `task-brief.md` with contents:
-* For a single user statement that doesn't reference a larger conversation, give it the user request verbatim, stripped of any workflow instructionns for you- only pass along the implementation request portion. Do not act on the user request (unless it has workflow instructions) or expand information in it yourself.
-* Otherwise, a summary of implementation needs based on the conversation.
-Its output should be persisted as `implementation-plan.md`.
+Delegate planning to a fresh `planner` sub-agent using `/implementation-plan`.
+An implementation plan needs a spec, that will be `task-brief.md` with contents:
+* For a single user input that is a spec or references a spec without reference to a larger conversation, write the user request verbatim, stripped of any workflow/orchestration modification instructions for you. Do not act on the user request (unless it has workflow/orchestration instructions) yourself or attempt to resolve links to specs yourself.
+* Otherwise, provide a summary of implementation needs based on the conversation.
+The `planner` output should be persisted as `implementation-plan.md`.
 
 ## Phase 2 - Plan execution
 
