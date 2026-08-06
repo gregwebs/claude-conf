@@ -1,34 +1,15 @@
 ---
 name: implement
-description: "Implement a piece of work based on a spec or set of tickets."
+description: "Implement a piece of work based on a spec or ticket. Create a plan. Review the plan and changes."
 ---
-
-# Overview
-
-Implement a change with planning and reviewing.
 
 # Agent Delegation
 
 Orchestrate subagents to minimize context and cost.
 The `planner` subagent is smarter and more costly and produces the design.
 The `implementer` subagent implements the plan and is designed to lower costs.
-Artifacts are passed between agents with the goal that agents start with a summary of all useful information from other agents. Re-exploration should be minimized, although it is needed for independent reviews and for the implementer to go into further detail.
 
-If the required planner or implementer delegation is unavailable, stop after
-planning and ask the user for an implementer/model handoff (the /handoff skill may be available). Do not execute the plan inline on the planning model.
-
-Use artifacts at every delegation seam. At the start of the workflow, create a
-task-scoped temporary directory outside the repository. Do not commit its
-contents. The orchestrator, not a read-only delegate, persists each returned
-artifact. Pass absolute artifact paths between agents:
-
-- `task-brief.md`: the user request, settled decisions, and source references
-- `implementation-plan.md`: the current plan; executable only after review
-- `plan-review.md`: adversarial plan findings
-- `implementation-result.md`: changed files and verification performed
-- `code-review.md`: implementation review findings
-- `code-review-followup.md`: implementation review followup findings
-- `verifications.md`: verifications to be performed
+Artifacts are passed between agents with the goal that agents start with a summary of all useful information from other agents: this minimizes re-exploration.
 
 Start every planner, reviewer, and implementer delegation without inherited
 conversation history. In Codex use `fork_turns="none"`; use the equivalent
@@ -36,19 +17,29 @@ empty-context option on other platforms. Give the delegate only its requested
 action and the artifact or source paths it needs. Do not paste the conversation
 transcript into the delegation prompt.
 
+Use `.md` artifacts for every sub-agent request. At the start of the workflow, create 
+task-scoped temporary directory outside the repository. Do not commit its
+contents. Pass absolute artifact paths between agents.
+
 # Flow
 
 ## Phase 1 - A good plan
 
-Create `task-brief.md`, then delegate planning to a fresh `planner` subagent
-using `/implementation-plan`. Give it the task brief path and any durable source
-paths. Persist its output as `implementation-plan.md`.
+Delegate planning to a fresh `planner` subagent using `/implementation-plan`.
+Pass it `task-brief.md` with contents:
+* For a single user statement that doesn't refereance a larger conversation, give it the user request verbatim.
+* Otherwise, summarize the conversation
+Persist its output as `implementation-plan.md`.
 
 ## Phase 2 - Plan execution
 
 Delegate to a fresh `implementer` sub-agent with only
 * `task-brief.md`
 * `implementation-plan.md`
+
+If the required implementer delegation is unavailable, stop after
+planning and ask the user for an implementer/model handoff (the /handoff skill may be available). Do not execute the plan inline on the planning model.
+
 
 ### implementer sub-agent
 

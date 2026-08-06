@@ -30,6 +30,8 @@ limitation in your result and plan anyway.
 Use a user-supplied path or ticket first; then an accessible referenced issue;
 then a matching tracked spec; then conversation context. If none exists,
 suggest `/grill-with-docs` or `/to-spec` before planning.
+If a ticket links to other related documentation or pull requests, fetch them as well if you have access.
+If there is a parent issue or related issues that are completed, look at those completed issues. You can do this by looking at the commit history if the commit documents the issue.
 
 ### Identify the standards sources
 

@@ -212,7 +212,6 @@ assert_contains .codex/agents/implementer.toml 'Read and follow the Phase 2 - Pl
 assert_contains .agents/skills/implement/SKILL.md 'fork_turns="none"'
 assert_contains .agents/skills/implement/SKILL.md 'task-brief.md'
 assert_contains .agents/skills/implement/SKILL.md 'implementation-plan.md'
-assert_contains .agents/skills/implement/SKILL.md 'plan-review.md'
 assert_contains .agents/skills/implement/SKILL.md 'implementation-result.md'
 assert_contains .agents/skills/implement/SKILL.md 'code-review.md'
 assert_contains README.md '#### Artifact-based handoffs'
