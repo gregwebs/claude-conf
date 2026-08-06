@@ -4,7 +4,7 @@ description: "Adversarial code review with explicit followup instructions"
 ---
 
 Have a `reviewer` sub-agent perform an **adversarial** `/code-review` using instructions supplied to this skill.
-There is one instruction to override what is in the skill: don't use parallel sub-agents within the `/code-review` skill unless the changeset is enormous.
+There is one instruction to override what is in the skill: don't use parallel sub-agents within the `/code-review` skill unless the changeset is enormous. Instead have one sub-agent do a 2-pass review- the first for spec, and the 2nd for standards.
 Persist findings as `code-review.md`.
 
 If there are no findings in review (rare unless the changes is trivial), code review is complete.
