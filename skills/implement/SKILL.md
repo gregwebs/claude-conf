@@ -74,7 +74,11 @@ Separately, extract all verification steps (from the plan and anything you perfo
 
 ## Phase 3 - Review
 
-Perform `/code-review-with-followup` using these files:
+Delegate `/code-review-with-followup` to an sub-agent. Look for an existing defined agent in this order:
+* `reviewer`
+* `planner`
+
+Use these files:
 * `task-brief.md`
 * `implementation-plan.md`
 * `implementation-result.md`
