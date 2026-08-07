@@ -43,25 +43,34 @@ If the required implementer delegation is unavailable, stop after
 planning and ask the user for an implementer/model handoff (the /handoff skill may be available). Do not execute the plan inline on the planning model.
 
 
-### implementer sub-agent
+### implementer sub-agent prompt
 
-Read the `task-brief.md` and `implementation-plan.md` paths. Do not redesign the plan.
+You are the IMPLEMENTER sub-agent. Execute an already-approved implementation plan. Do NOT redesign the plan.
 
-Use /tdd where possible, at pre-agreed seams.
+#### Inputs (read both fully, in order)
+- `task-brief.md`
+- `implementation-plan.md`
+These are self-contained. The plan restates all needed issue detail.
 
-Run typechecking regularly, single test files regularly, and the full test suite once at the end.
+#### How to work
 
-Don't document *what* code does. Write new code to make what it self-documenting. For example, extract code to a function with a descriptive name.
-When appropriate document *why* code does what it does due to a requirement or in preference to an alternative.
+- Follow the plan's step-by-step sequence.
+- Use TDD at the seams the plan identifies (invoke the `/tdd` skill where practical).
+- Read repo documentation (INSERT SPECIFIC DOCS) for conventions before editing code.
+- Run typechecking regularly, single test files regularly, and the full test suite once at the end.
+- Do not document *what* code does; make it self-documenting via good names/extraction. Add *why* comments only where a requirement or a deliberately-rejected alternative needs explaining.
+- Stay strictly within this ticket's scope.
 
-STOP executing immediately when
-* Plan has critical gaps
+#### STOP immediately and report if:
+* The plan has a critical gap
 * You don't understand an instruction
 * Verification fails repeatedly
 
+#### Output
+
 Persist a final report as `implementation-result.md`.
 
-Separate out any verifications from `implementation-plan.md` and `implementation-result.md` as `verifications.md`.
+Separately, extract all verification steps (from the plan and anything you performed or recommend) into  `verifications.md`.
 
 ## Phase 3 - Review
 
