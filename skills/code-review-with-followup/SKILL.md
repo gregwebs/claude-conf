@@ -4,6 +4,7 @@ description: "Adversarial code review with explicit followup instructions"
 ---
 
 Have a `reviewer` sub-agent perform a `/code-review-adversarial` using instructions supplied to this skill.
+Persist its ouput as `code-review.md`.
 
 If there are no findings in review (rare unless the changes is trivial), code review is complete.
 Otherwise, perform a followup review.
