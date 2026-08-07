@@ -45,7 +45,7 @@ planning and ask the user for an implementer/model handoff (the /handoff skill m
 
 ### implementer sub-agent prompt
 
-You are the IMPLEMENTER sub-agent. Execute an already-approved implementation plan. Do NOT redesign the plan.
+Execute an already-approved implementation plan. Do NOT redesign the plan.
 
 #### Inputs (read both fully, in order)
 - `task-brief.md`
