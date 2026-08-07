@@ -49,6 +49,7 @@ For local validation, run:
 
 ```sh
 ./test/install-agents.sh
+./test/install-standards.sh
 ./test/repository-interface.sh
 ./scripts/check-skill-inlines.sh
 git diff --check

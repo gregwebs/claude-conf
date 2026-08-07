@@ -81,6 +81,23 @@ individually. Existing conflicting entries are refused by default. Use
 `--dry-run` to inspect planned changes, or `--help` for source and destination
 overrides.
 
+Generate a project's `CODING_STANDARDS.md` from this repository's
+[standards/](./standards) documents with:
+
+```sh
+./scripts/install-standards.sh coding go security
+```
+
+Positional arguments name which `standards/*.md` documents to compile and in
+which order (the `.md` suffix is optional); the result is written to stdout,
+so redirect it into your project, e.g. `> /path/to/project/CODING_STANDARDS.md`.
+Run with no arguments for an interactive prompt that lists the available
+standards and reads your selection. Pass `--output-dir DIR` to write
+`DIR/CODING_STANDARDS.md` directly — reruns are idempotent (a byte-identical
+result is left alone), a changed result is refused unless `--force` is given,
+in which case the previous file is kept as a timestamped backup. Use `--list`
+to print the available standards, or `--help` for all options.
+
 You can install these skills to your home directory (~/.agents/skills).
 However, to override those skills with ones from this repo with the same name (/grilling, /implement),
 you will need to install to a different location (I suggest cloning the repo).
@@ -92,7 +109,7 @@ The skils in this repo are in [.agents/skills](.agents/skills). /grilling is ver
 
 ## Workflow
 
-Workflows are started by you, normally with:
+Workflows are started by you, normally with a frontier model using these skills:
 
 * /grill-with-docs (new feature)
 * /diagnosing-bugs (fix a bug)
@@ -111,6 +128,8 @@ After a spec is generated, it can be broken down into slices and published with
 Then implemented with
 
 * /implement
+
+This orcestrates planning, implementing, and reviewing. If you install the agents in this repo, it will switch between `implementer` and `planner`. The skill itself can be ran with a less capable model.
 
 ### Differences
 
