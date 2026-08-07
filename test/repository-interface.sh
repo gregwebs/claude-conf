@@ -4,7 +4,7 @@ set -euo pipefail
 
 REPOSITORY_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 GITHUB_DISPATCHER="$REPOSITORY_ROOT/scripts/gh-app.sh"
-CI_CHECKER="$REPOSITORY_ROOT/.agents/skills/github-actions-ci/scripts/check-ci-runs.sh"
+CI_CHECKER="$REPOSITORY_ROOT/./skills/github-actions-ci/scripts/check-ci-runs.sh"
 INLINE_CHECKER="$REPOSITORY_ROOT/scripts/check-skill-inlines.sh"
 
 fail() {
@@ -48,7 +48,7 @@ assert_help() {
     fail "expected --help to succeed: $*"
   fi
   case "$help_output" in
-    *".agents/skills/"*|*"gh-app-"*".sh"*)
+    *"./skills/"*|*"gh-app-"*".sh"*)
       fail "help exposed an internal implementation path: $help_output"
       ;;
   esac
@@ -197,11 +197,11 @@ assert_json '.permissions.defaultMode' 'plan'
 assert_executable "$GITHUB_DISPATCHER"
 assert_executable "$CI_CHECKER"
 assert_absent "$REPOSITORY_ROOT/scripts/check-ci-runs.sh"
-assert_readable "$REPOSITORY_ROOT/.agents/skills/github-app/scripts/gh-app-token.sh"
+assert_readable "$REPOSITORY_ROOT/./skills/github-app/scripts/gh-app-token.sh"
 
 for tracked_path in \
-  .agents/skills/implementation-plan/SKILL.md \
-  .agents/skills/implement/SKILL.md ; do
+  ./skills/implementation-plan/SKILL.md \
+  ./skills/implement/SKILL.md ; do
   assert_tracked "$tracked_path"
 done
 
@@ -209,21 +209,21 @@ assert_contains .claude/agents/planner.md 'Read and follow the /implementation-p
 assert_contains .codex/agents/planner.toml 'Read and follow the /implementation-plan skill.'
 assert_contains .claude/agents/implementer.md 'Read and follow the Phase 2 - Plan execution section of the /implement skill.'
 assert_contains .codex/agents/implementer.toml 'Read and follow the Phase 2 - Plan execution section of the /implement skill.'
-assert_contains .agents/skills/implement/SKILL.md 'fork_turns="none"'
-assert_contains .agents/skills/implement/SKILL.md 'task-brief.md'
-assert_contains .agents/skills/implement/SKILL.md 'implementation-plan.md'
-assert_contains .agents/skills/implement/SKILL.md 'implementation-result.md'
+assert_contains ./skills/implement/SKILL.md 'fork_turns="none"'
+assert_contains ./skills/implement/SKILL.md 'task-brief.md'
+assert_contains ./skills/implement/SKILL.md 'implementation-plan.md'
+assert_contains ./skills/implement/SKILL.md 'implementation-result.md'
 assert_contains README.md '#### Artifact-based handoffs'
 # This assertion intentionally searches for the literal skill-directory expression.
 # shellcheck disable=SC2016
-assert_contains .agents/skills/github-actions-ci/SKILL.md \
+assert_contains ./skills/github-actions-ci/SKILL.md \
   'allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/check-ci-runs.sh *)'
 # This assertion intentionally searches for the literal command substitution.
 # shellcheck disable=SC2016
-assert_contains .agents/skills/github-actions-ci/scripts/check-ci-runs.sh \
+assert_contains ./skills/github-actions-ci/scripts/check-ci-runs.sh \
   'REPO_ROOT="$(git rev-parse --show-toplevel)"'
 if rg -q 'Pass the .* output \*\*verbatim\*\*' \
-  "$REPOSITORY_ROOT/.agents/skills/implement/SKILL.md"; then
+  "$REPOSITORY_ROOT/./skills/implement/SKILL.md"; then
   fail 'implement workflow passes planner output inline instead of by artifact'
 fi
 for adapter in \
@@ -232,17 +232,17 @@ for adapter in \
   .codex/agents/planner.toml \
   .codex/agents/implementer.toml; do
   assert_contains "$adapter" 'delegated by /implement'
-  if rg -q '\.agents/skills/(implementation-plan|implement)/SKILL\.md' "$REPOSITORY_ROOT/$adapter"; then
+  if rg -q '\./skills/(implementation-plan|implement)/SKILL\.md' "$REPOSITORY_ROOT/$adapter"; then
     fail "adapter contains a repository-local skill path: $adapter"
   fi
 done
-if rg -q '\bmain\b' "$REPOSITORY_ROOT/.agents/skills/pull-request/SKILL.md"; then
+if rg -q '\bmain\b' "$REPOSITORY_ROOT/./skills/pull-request/SKILL.md"; then
   fail 'pull-request instructions assume main instead of the discovered default branch'
 fi
-if rg -q 'docs/change/' "$REPOSITORY_ROOT/.agents/skills/github-app"; then
+if rg -q 'docs/change/' "$REPOSITORY_ROOT/./skills/github-app"; then
   fail 'GitHub App instructions reference absent change history files'
 fi
-if rg -q '\.agents/skills/|docs/change/' "$REPOSITORY_ROOT/.agents/skills/github-app/scripts"; then
+if rg -q '\./skills/|docs/change/' "$REPOSITORY_ROOT/.agents/skills/github-app/scripts"; then
   fail 'GitHub App bundled scripts contain a repository-local documentation reference'
 fi
 for script in \
@@ -253,18 +253,18 @@ for script in \
   gh-app-issue-get.sh \
   gh-app-issue-sub-add.sh \
   gh-app-pr-create.sh; do
-  assert_contains ".agents/skills/github-app/scripts/$script" \
+  assert_contains "./skills/github-app/scripts/$script" \
     'Requires a GitHub App set up per the Setup reference in the /github-app skill.'
 done
 
 # The repository owns the expected inventory; the generic checker validates
 # declarations but cannot know whether a copied section was omitted.
-assert_contains .agents/skills/breakdown/SKILL.md 'inlined-from:'
-assert_contains .agents/skills/breakdown/SKILL.md '### 4. Quiz the user'
-assert_contains .agents/skills/implementation-plan/SKILL.md 'inlined-from:'
-assert_contains .agents/skills/implementation-plan/SKILL.md '### 2. Identify the spec source'
+assert_contains ./skills/breakdown/SKILL.md 'inlined-from:'
+assert_contains ./skills/breakdown/SKILL.md '### 4. Quiz the user'
+assert_contains ./skills/implementation-plan/SKILL.md 'inlined-from:'
+assert_contains ./skills/implementation-plan/SKILL.md '### 2. Identify the spec source'
 for skill in implement github-tickets pull-request github-app github-actions-ci grilling; do
-  if rg -q 'inlined-from:' "$REPOSITORY_ROOT/.agents/skills/$skill/SKILL.md"; then
+  if rg -q 'inlined-from:' "$REPOSITORY_ROOT/./skills/$skill/SKILL.md"; then
     fail "unexpected inline provenance inventory for $skill"
   fi
 done
@@ -294,17 +294,17 @@ if (cd "$TEMP_ROOT" && "$GITHUB_DISPATCHER" unknown-command >"$unknown_output" 2
   fail 'unknown dispatcher command succeeded'
 fi
 rg -q '^usage:' "$unknown_output" || fail 'unknown dispatcher command did not print usage'
-if rg -q '\.agents/skills/|gh-app-[a-z-]+\.sh' "$unknown_output"; then
+if rg -q '\./skills/|gh-app-[a-z-]+\.sh' "$unknown_output"; then
   fail 'unknown dispatcher command exposed an internal implementation path'
 fi
 
 if rg -n '\./scripts/github/|gh-app-[a-z-]+\.sh' \
-  "$REPOSITORY_ROOT/.agents/skills" \
+  "$REPOSITORY_ROOT/./skills" \
   --glob 'SKILL.md'; then
   fail 'workflow skills bypass the public scripts interface'
 fi
 if rg -n '\./scripts/check-ci-runs\.sh' \
-  "$REPOSITORY_ROOT/.agents/skills" \
+  "$REPOSITORY_ROOT/./skills" \
   --glob 'SKILL.md'; then
   fail 'workflow skills expect a repository-local CI checker'
 fi
