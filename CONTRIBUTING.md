@@ -48,6 +48,7 @@ need to provide a wrapper. Smoke-test these interfaces with:
 For local validation, run:
 
 ```sh
+./test/install-agents.sh
 ./test/repository-interface.sh
 ./scripts/check-skill-inlines.sh
 git diff --check

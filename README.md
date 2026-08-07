@@ -67,6 +67,20 @@ different skill-root symlinks, so the installer preserves those roots and
 only adds missing individual skill links. Run `./scripts/install-skills.sh
 --help` for source and destination overrides.
 
+Install the repository's agent definitions with:
+
+```sh
+./scripts/install-agents.sh
+```
+
+This links `agents/*.md` into `~/.claude/agents` and `.codex/agents/*.toml`
+into `~/.codex/agents`. Both destination directories are created as needed;
+unrelated existing agents are preserved because each agent is linked
+individually. Existing conflicting entries are refused by default. Use
+`--force` to retain a timestamped adjacent backup before replacing a conflict,
+`--dry-run` to inspect planned changes, or `--help` for source and destination
+overrides.
+
 You can install these skills to your home directory (~/.agents/skills).
 However, to override those skills with ones from this repo with the same name (/grilling, /implement),
 you will need to install to a different location (I suggest cloning the repo).
