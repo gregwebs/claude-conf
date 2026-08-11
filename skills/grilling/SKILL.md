@@ -5,18 +5,39 @@ description: Grill the user relentlessly - used for planning. Use when the user 
 
 Interview the user relentlessly until you reach a shared understanding. Map this as a design tree: every decision branches into the decisions that hang off it.
 
-# Recommendation
+# Question format
 
-All questions have a recommended answer.
+## Recommendation and affirmation
+
+All questions have a **recommended** answer.
 Most questions have alternative answers.
-The reasons for the recommendation and trade-offs with different approaches should be stated succinctly.
-Affirming is accepting the recommended answer.
+The reasons for the recommendation and trade-offs with different approaches are stated succinctly.
+
+**Affirming** is accepting the **recommended** answer.
+
+Use this question template:
+
+```
+❓ **Q1.1** - **<question subject>**
+<question body, might be multiple paragraphs>
+
+1) <your recommended answer, and reason why>
+2) <alternative answer, and reason why>
+3) ...
+
+Do you agree with the first recommended answer? Type "yes", or "1".
+Or type the number of an alternative, or type a completely different response.
+```
+
+Alternatively you can use a selection menu. In that case the recommendation should be the default selected response.
+
+If the user's answer is a simple agreement (e.g. "1", "y", "Y", "Yes", "yes", "YES!"), the recommendation is affirmed.
 
 # Question round
 
 The design tree is worked in **rounds**, a set of questions on a related subject.
 
-Questions are identified to the user as ${round_id}.${question_id}. Example session:
+Questions are identified to the user as ${round_number}.${question_number}. Example session:
 * Q: 1.1, A: yes
 * Q: 1.2, A: No
 * Q: 2.1, etc
@@ -27,10 +48,6 @@ Utilize a separate persistent sub-agent thread to analyze the project and genera
 This allows the subagent to come up with the next questions for the round while you are waiting for the user to answer the current question.
 Your job is solely to manage the user's grilling session Q&A experience.
 The sub-agent will first be tasked with asking the first design question. After that, it will receive user answers and generate new questions.
-
-When presenting a question without any selector menu, always end with "Do you agree with the recommendation?"
-If the user's answer is "y", "Y", "Yes", "yes", or "YES!", the recommendation is affirmed.
-If you present a selector menu for the user, the recommendation should be default selected response.
 
 Your first priority to present questions with low latency. After launching the sub-agent, your workflow will be:
 
@@ -43,14 +60,13 @@ Your first priority to present questions with low latency. After launching the s
   * While waiting, check for new sub-agent responses
 * User answers
 * Asynchronously send the response to the sub-agent. Do not wait for a reply.
-    
 
 # Communication protocol
 
 ## Ids
 
 Ids should use letters rather than numbers.
-This distinguishes internal communication from user presentation.
+This distinguishes internal communication from user presentation (which always uses numbers).
 
 ## Answers
 
