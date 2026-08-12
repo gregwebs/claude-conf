@@ -55,6 +55,7 @@ High-level details:
   * connections
   * state transitions
 - a pre-agreed TDD seam, or an explanation of why automated tests do not apply
+- Review notes (put the text "not reviewed" in this section until it is reviewed)
 
 Low-level details:
 - detailed file-level type and function signature changes, including snippets for important non-obvious ideas

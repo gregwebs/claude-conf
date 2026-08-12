@@ -32,6 +32,7 @@ An implementation plan needs a spec, that will be `task-brief.md` with contents:
 * For a single user input that is a spec or references a spec without reference to a larger conversation, write the user request verbatim, stripped of any workflow/orchestration modification instructions for you. Do not act on the user request (unless it has workflow/orchestration instructions) yourself or attempt to resolve links to specs yourself.
 * Otherwise, provide a summary of implementation needs based on the conversation.
 The `planner` output should be persisted as `implementation-plan.md`.
+The `/implementation-plan` skill calls for a separate sub-agent review- ensure that it happens- you may need to spawn the sub-agent review.
 
 ## Phase 2 - Plan execution
 
