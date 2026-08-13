@@ -1,5 +1,5 @@
 ---
-name: code-review-with-followup
+name: code-review-adversarial
 description: "Adversarial code review of spec/quality with a single agent"
 ---
 
