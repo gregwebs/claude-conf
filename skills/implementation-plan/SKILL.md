@@ -49,24 +49,34 @@ If it does not, explain the split needed and suggest `/to-tickets`;
 The plan must give an implementer enough detail to execute without redesign.
 
 High-level details:
-- architectural overview
-- the assumptions, failure modes, and relevant standards constraints.
-- a diagram, table, or detailed description of changes in
-  * connections
-  * state transitions
-- a pre-agreed TDD seam, or an explanation of why automated tests do not apply
-- Review notes (put the text "not reviewed" in this section until it is reviewed)
+1. **Background** — Explain only the system needed for the change. Start with an optional beginner-friendly mental model, then narrow to the exact components, contracts, and prior behavior involved.
+2. **Intuition** — Explain the core idea before implementation detail. Use small concrete toy inputs and outputs with diagrams and examples where apropriate. Show the old and new behavior when comparison makes the change clearer.
 
-Low-level details:
-- detailed file-level type and function signature changes, including snippets for important non-obvious ideas
-- tests to implement
-- verifications to perform
-- documentation updates
-- a task checklist
+Implementation details:
+- Walk through the changes in conceptual groups, ordered by execution or dependency flow rather than arbitrary file order. Include precise file and line references when available, but do not dump an entire diff.
+- Detailed file-level type and function signature changes, including snippets for important non-obvious ideas
+- Tests to implement
+- Documentation updates
+- Include a pre-agreed TDD seam, or an explanation of why automated tests do not apply.
+- Verifications to perform
+
+Include the assumptions, and relevant standards constraints (these may be present in the spec).
+Explain relevant failure modes and how to handle them.
+
+Create diagrams and examples for:
+- important state transitions
+- flow diagrams for requests, data, or control flow;
+- before/after panels for changed behavior;
+- labeled component cards for system boundaries and connections;
+- compact tables for mappings, invariants, and toy data.
 
 Convert user stories into concrete tests or manual verification criteria.
 
+Include a task checklist
+
 ## Review
+
+Include a Review notes section in the plan. Put the text "not reviewed" in this section when the plan is written out and not yet reviewed.
 
 Unless the change is trivial, Have an independent subagent perform an adversarial review of the plan. Review in this order and incorporate the findings into the plan:
 

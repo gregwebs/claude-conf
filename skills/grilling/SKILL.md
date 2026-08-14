@@ -49,7 +49,8 @@ This allows the subagent to come up with the next questions for the round while 
 Your job is solely to manage the user's grilling session Q&A experience.
 The sub-agent will first be tasked with asking the first design question. After that, it will receive user answers and generate new questions.
 
-Your first priority to present questions with low latency. After launching the sub-agent, your workflow will be:
+Your first priority to present questions with low latency.
+After launching the sub-agent, your workflow will be:
 
 * Find your next question 
   * If the user affirmed the previous question in the round, and the next question for the round is available, use it immediately
@@ -60,6 +61,9 @@ Your first priority to present questions with low latency. After launching the s
   * While waiting, check for new sub-agent responses
 * User answers
 * Asynchronously send the response to the sub-agent. Do not wait for a reply.
+
+If the user's resposne is to asks for more detail, present information from the "depth" field if it appears to provide the needed detail.
+
 
 # Communication protocol
 
@@ -83,9 +87,10 @@ includes
 * round id
 * round description (only for the first question in a round)
 * question id
-* subject
+* subject text
 * question text
-* answers
+* depth text (in depth information not initially presented to the user)
+* answers [text]
 
 ## main -> sub-agent: answer
 
@@ -123,6 +128,9 @@ includes
 Each round the user answers reshapes the tree — settled decisions push the frontier outward and unblock questions that depended on them.
 
 Finding facts is your job, never the user's. When a frontier question needs a fact from the environment (filesystem, tools, etc.), find it — don't ask the user for anything you could look up yourself.
+
+Include background information in the question body: a succinct explanation of the existing system relevant to this change.
+In the "depth" field sent back include a more in depth explanation.
 
 ### Next question for the round
 

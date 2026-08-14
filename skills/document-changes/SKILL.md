@@ -8,10 +8,14 @@ description: "Record changes in either a PR, issues, docs, or chat output"
 A Change Record captures an ephemeral implementation moment; it is not lasting
 technical documentation.
 
-Avoid repeating the ticket or spec. Include technical decisions, a high-level
-summary, pointers to the changed code, completed checklist items, and the
-verification performed. Capture follow-on information that would help the next
-related change.
+The ticket or spec has information that should be included or referenced (if linked) for high-level information.
+
+A change record should have additional detail.
+If an implementation plan is available, that should include most information needed.
+Include technical decisions, pointers to the changed code, completed checklist items, and the
+verification performed. Capture follow-on information that would help the next related change.
+
+Use the /explain-changes skill to explain the code changes.
 
 Record a change record in 1 location prioritized according to this order:
 * The PR when one is authorized.
