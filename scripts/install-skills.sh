@@ -90,8 +90,8 @@ LOCAL_SKILLS_DIR="$(cd "$LOCAL_SKILLS_DIR" && pwd -P)"
 # upstream repository when its skill inventory changes.
 MATTPOCOCK_SKILLS=(
   ask-matt code-review codebase-design diagnosing-bugs domain-modeling
-  grill-me grill-with-docs handoff implement improve-codebase-architecture
-  implementation-plan prototype research resolving-merge-conflicts
+  grilling grill-me grill-with-docs handoff implement improve-codebase-architecture
+  prototype research resolving-merge-conflicts
   setup-matt-pocock-skills tdd teach to-spec to-tickets triage wayfinder
   writing-great-skills
 )
@@ -106,7 +106,7 @@ is_mattpocock_skill() {
 
 mapfile -t local_skills < <(
   find "$LOCAL_SKILLS_DIR" -mindepth 2 -maxdepth 2 -type f -name SKILL.md \
-    -exec dirname {} \; | xargs -n1 basename | sort -u
+    -exec dirname {} \; | xargs -n1 basename | sort -u | grep -v experimental
 )
 [ "${#local_skills[@]}" -gt 0 ] || die "no SKILL.md files found in: $LOCAL_SKILLS_DIR"
 
@@ -166,7 +166,7 @@ link_skill() {
   if [ -e "$target" ] || [ -L "$target" ]; then
     [ "$target" -ef "$source" ] && return
     if ! "$FORCE"; then
-      die "refusing to replace existing skill link: $target (rerun with --force)"
+      die "refusing to replace existing skill link: $target $source (rerun with --force)"
     fi
     backup="$target.backup.$(date +%Y%m%d%H%M%S)"
     run mv "$target" "$backup"
@@ -180,10 +180,6 @@ link_all_skills() {
   run mkdir -p "$destination"
   for name in "${local_skills[@]}"; do
     source="$(absolute_dir "$LOCAL_SKILLS_DIR/$name")"
-    link_skill "$destination" "$source"
-  done
-  for name in "${dependencies[@]}"; do
-    source="$(absolute_dir "$UPSTREAM_SKILLS_DIR/$name")"
     link_skill "$destination" "$source"
   done
 }
