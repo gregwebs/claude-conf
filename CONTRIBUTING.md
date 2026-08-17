@@ -43,7 +43,12 @@ need to provide a wrapper. Smoke-test these interfaces with:
 
 ```sh
 ./test/repository-interface.sh
+./test/check-ci-runs.sh
 ```
+
+`./test/check-ci-runs.sh` is a fixture-driven functional test (stubbed GitHub API,
+no network) covering the checker's exit codes, including the "no GitHub Actions
+checks apply to this commit" classification.
 
 For local validation, run:
 
@@ -51,6 +56,7 @@ For local validation, run:
 ./test/install-agents.sh
 ./test/install-standards.sh
 ./test/repository-interface.sh
+./test/check-ci-runs.sh
 ./scripts/check-skill-inlines.sh
 git diff --check
 ```

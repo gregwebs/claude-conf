@@ -57,15 +57,28 @@ With `--wait`, keep the process running and poll its existing execution session
 at intervals no longer than 30 seconds so the user continues to receive timely
 updates. Do not start duplicate monitors. Authenticated polling defaults to ten
 seconds; the helper backs off to sixty seconds when App credentials are absent
-to respect GitHub's anonymous rate limit.
+to respect GitHub's anonymous rate limit. When no check runs are found yet, the
+helper waits up to `CI_ABSENT_GRACE_SECONDS` (default 120s) before concluding
+that no GitHub Actions checks apply to the commit.
 
 Exit status means:
 
-- `0`: every selected check completed successfully.
+- `0`: every selected check completed successfully, **or** the helper
+  determined that no GitHub Actions checks apply to this commit at all. Read
+  the stderr line to tell which — a "no GitHub Actions workflows configured"
+  or "no GitHub Actions checks apply to `<sha>`" message means the latter.
 - `1`: at least one selected check completed unsuccessfully.
-- `2`: selected checks are pending or absent when not using `--wait`.
+- `2`: selected checks are pending or undetermined when not using `--wait`.
 
 Always relay the job URL printed by the helper.
+
+## No CI configured
+
+When the helper's stderr reports that no GitHub Actions checks apply (exit
+`0` with no job listing on stdout), tell the user the PR/commit has no
+GitHub Actions CI rather than saying "CI passed" — there is nothing to point
+a job URL at. Stop there: do not rerun the helper, start `--wait` again, or
+otherwise keep monitoring a commit that has nothing to report.
 
 ## Handle results
 
