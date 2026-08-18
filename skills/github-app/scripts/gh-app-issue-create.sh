@@ -2,12 +2,10 @@
 # Open an issue, authenticated as a GitHub App installation.
 #
 # Usage: gh-app-issue-create.sh --title TITLE \
-#          [--repo OWNER/REPO] [--body TEXT | --body-file FILE] [--label LABEL]...
+#          [--body TEXT | --body-file FILE] [--label LABEL]...
 #
-# --repo defaults to the current directory's github.com origin remote.
-# Requires a GitHub App set up per the Setup reference in the /github-app skill.
-# (client-id, private-key.pem under ~/.config/github-app/, not tracked;
-# installation granted Issues:write on the repo).
+# Requires a GitHub App set up per the Setup reference in the /github-app skill
+# with installation granted Issues:write on the repo.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -15,7 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/lib.sh"
 
 usage() {
-  echo "usage: $0 --title TITLE [--repo OWNER/REPO] [--body TEXT | --body-file FILE] [--label LABEL]..."
+  echo "usage: $0 --title TITLE [--body TEXT | --body-file FILE] [--label LABEL]..."
 }
 
 repo="" title="" body="" body_file="" labels=()

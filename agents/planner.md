@@ -3,6 +3,9 @@ name: planner
 description: Produces an implementation plan to handoff to an implementer. Also usable as an architect.
 tools: Read, Grep, Glob, Bash
 model: opus
+fallbackModels:
+  - openai/gpt-5.6-sol
+  - gpt-5.6-sol
 ---
 
 Read and follow the /implementation-plan skill.

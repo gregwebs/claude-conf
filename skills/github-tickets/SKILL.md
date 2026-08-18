@@ -52,11 +52,21 @@ If the approved breakdown has two or more tickets:
 4. Sub-issue linking is failure-tolerant. If linking fails because of a 403,
    422, rate limit, or similar API issue, record the failure, keep creating the
    remaining children, and report all link outcomes at the end.
-5. After all children are created, update the parent with
+5. Once every child issue exists, record the approved breakdown's blocking
+   edges as native dependencies. For each ticket with declared blockers, run:
+   `./scripts/gh-app.sh issue-block-add --blocked M --blocker K`
+   (`M` is the blocked child's issue number, `K` is each blocker's). Do this as
+   a final pass after all children exist — a blocker's issue number isn't
+   necessarily known yet when its dependents are created. Same
+   failure-tolerant contract as sub-issue linking: on 403, 422, rate limit, or
+   similar, record the failure, keep going, and report all outcomes at the end.
+6. After all children are created, update the parent with
    `./scripts/gh-app.sh issue-update --issue N --body-file FILE`,
    re-sending the full body plus an appended `## Implementation tickets`
-   section. List every child URL in dependency order and note any native
-   sub-issue links that failed.
+   section. List every child URL in dependency order, note its blockers in
+   prose (e.g. `blocked by #12, #13`) so the graph survives even where a link
+   attempt failed, and note any native sub-issue or blocked-by links that
+   failed.
 
 Relay all created issue URLs back to the user, parent first, including any
-sub-issue link failures.
+sub-issue or blocked-by link failures.

@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 # Read an issue, authenticated as a GitHub App installation.
 #
-# Usage: gh-app-issue-get.sh --issue NUMBER [--repo OWNER/REPO]
+# Usage: gh-app-issue-get.sh --issue NUMBER
 #
-# --repo defaults to the current directory's github.com origin remote.
 # Requires a GitHub App set up per the Setup reference in the /github-app skill.
-# (client-id, private-key.pem under ~/.config/github-app/, not tracked).
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -40,12 +38,21 @@ case "$format" in
   md)
     # Concise human-readable rendering (title, metadata, body) so callers
     # don't need to pipe the full JSON through an extra jq/python step.
-    gh_app_api_get "repos/${repo}/issues/${issue}" | jq -r '
-      "# #\(.number) \(.title)",
-      "state: \(.state)   labels: \([.labels[].name] | join(", "))",
-      (if .parent_issue_url then "parent: #\(.parent_issue_url | sub(".*/";""))" else empty end),
+    issue_json=$(gh_app_api_get "repos/${repo}/issues/${issue}")
+    # Dependency lookups are failure-tolerant: a repo without issue
+    # dependencies enabled (or an API version mismatch) must not break a
+    # plain issue read.
+    blocked_by=$(gh_app_api_get "repos/${repo}/issues/${issue}/dependencies/blocked_by" 2>/dev/null) || blocked_by='[]'
+    blocking=$(gh_app_api_get "repos/${repo}/issues/${issue}/dependencies/blocking" 2>/dev/null) || blocking='[]'
+    jq -n --argjson issue "$issue_json" --argjson blocked_by "$blocked_by" --argjson blocking "$blocking" -r '
+      def numbers: [.[] | "#\(.number)"] | if length > 0 then join(", ") else "none" end;
+      "# #\($issue.number) \($issue.title)",
+      "state: \($issue.state)   labels: \([$issue.labels[].name] | join(", "))",
+      (if $issue.parent_issue_url then "parent: #\($issue.parent_issue_url | sub(".*/";""))" else empty end),
+      "blocked by: \($blocked_by | numbers)",
+      "blocking: \($blocking | numbers)",
       "",
-      .body'
+      $issue.body'
     ;;
   *)
     echo "unknown --format: $format (want json or md)" >&2

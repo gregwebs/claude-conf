@@ -252,9 +252,12 @@ for script in \
   gh-app-issue-create.sh \
   gh-app-issue-get.sh \
   gh-app-issue-sub-add.sh \
+  gh-app-issue-block-add.sh \
+  gh-app-issue-block-remove.sh \
+  gh-app-issue-block-list.sh \
   gh-app-pr-create.sh; do
   assert_contains "./skills/github-app/scripts/$script" \
-    'Requires a GitHub App set up per the Setup reference in the /github-app skill.'
+    'Requires a GitHub App set up per the Setup reference in the /github-app skill'
 done
 
 # The repository owns the expected inventory; the generic checker validates
@@ -263,7 +266,7 @@ assert_contains ./skills/breakdown/SKILL.md 'inlined-from:'
 assert_contains ./skills/breakdown/SKILL.md '### 4. Quiz the user'
 assert_contains ./skills/implementation-plan/SKILL.md 'inlined-from:'
 assert_contains ./skills/implementation-plan/SKILL.md '### 2. Identify the spec source'
-for skill in implement github-tickets pull-request github-app github-actions-ci grilling; do
+for skill in implement github-tickets pull-request github-app github-actions-ci; do
   if rg -q 'inlined-from:' "$REPOSITORY_ROOT/./skills/$skill/SKILL.md"; then
     fail "unexpected inline provenance inventory for $skill"
   fi
@@ -282,6 +285,9 @@ for command_name in \
   issue-update \
   issue-comment \
   issue-sub-add \
+  issue-block-add \
+  issue-block-remove \
+  issue-block-list \
   actions-run-view \
   actions-job-log \
   actions-rerun-failed; do

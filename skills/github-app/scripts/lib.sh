@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck disable=SC1091
 source "$SCRIPT_DIR/gh-app-token.sh"
 
-GH_APP_API_VERSION="2022-11-28"
+GH_APP_API_VERSION="${GH_APP_API_VERSION:-2022-11-28}"
 
 # Best-effort "owner/repo" from the current directory's origin remote.
 gh_app_default_repo() {
@@ -65,6 +65,28 @@ gh_app_api_patch() {
     -H "X-GitHub-Api-Version: ${GH_APP_API_VERSION}" \
     "https://api.github.com/${path}" \
     -d "$payload")
+  status=$(printf '%s' "$response" | tail -n1)
+  body=$(printf '%s' "$response" | sed '$d')
+  if [ "$status" -ge 400 ]; then
+    echo "GitHub API error ($status):" >&2
+    printf '%s\n' "$body" | jq . >&2 2>/dev/null || printf '%s\n' "$body" >&2
+    return 1
+  fi
+  printf '%s' "$body" | jq -r '.html_url'
+}
+
+# DELETE API path $1 (e.g. "repos/owner/repo/issues/42/dependencies/blocked_by/123"),
+# authenticated with a freshly minted App installation token. Prints the
+# response's html_url on success; prints the error body to stderr and
+# returns 1 on a >=400 response.
+gh_app_api_delete() {
+  local path="$1" token response status body
+  token=$(gh_app_token)
+  response=$(gh_app_curl -s -w '\n%{http_code}' -X DELETE \
+    -H "Authorization: token $token" \
+    -H "Accept: application/vnd.github+json" \
+    -H "X-GitHub-Api-Version: ${GH_APP_API_VERSION}" \
+    "https://api.github.com/${path}")
   status=$(printf '%s' "$response" | tail -n1)
   body=$(printf '%s' "$response" | sed '$d')
   if [ "$status" -ge 400 ]; then

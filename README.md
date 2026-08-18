@@ -28,6 +28,8 @@ If configured and allowed, the agent can send Pull Requests, and you can decide 
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for how to test changes to this repo.
 
+See [docs/plans/](./docs/plans/) for implementation plans behind past changes to this repo.
+
 ## CLAUDE.md vs AGENTS.md
 
 CLAUDE.md has @AGENTS.md at the top- that will include the contents of AGENTS.md into CLAUDE.md

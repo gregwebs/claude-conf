@@ -3,6 +3,9 @@ name: implementer
 description: "Implementer. Implement code, preferably from a plan."
 model: sonnet
 permissionMode: acceptEdits
+fallbackModels:
+  - openai/gpt-5.6-terra
+  - gpt-5.6-terra
 ---
 
 Use coding standards defined in CODING_STANDARDS.md or README.md or AGENTS.md, etc.

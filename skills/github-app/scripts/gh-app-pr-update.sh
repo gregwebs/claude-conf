@@ -2,14 +2,12 @@
 # Update an existing pull request, authenticated as a GitHub App installation.
 # The PR must be in draft state; updates to non-draft PRs are rejected.
 #
-# Usage: gh-app-pr-update.sh --pr NUMBER [--repo OWNER/REPO]
+# Usage: gh-app-pr-update.sh --pr NUMBER
 #          [--title TITLE] [--body TEXT | --body-file FILE]
 #          [--base BASE] [--state open|closed]
 #
-# --repo defaults to the current directory's github.com origin remote.
 # At least one of --title, --body/--body-file, --base, or --state is required.
-# Requires a GitHub App set up per the Setup reference in the /github-app skill.
-# (client-id, private-key.pem under ~/.config/github-app/, not tracked;
+# Requires a GitHub App set up per the Setup reference in the /github-app skill with
 # installation granted Contents:write + Pull requests:write on the repo).
 set -euo pipefail
 

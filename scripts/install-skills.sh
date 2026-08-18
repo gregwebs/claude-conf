@@ -106,7 +106,7 @@ is_mattpocock_skill() {
 
 mapfile -t local_skills < <(
   find "$LOCAL_SKILLS_DIR" -mindepth 2 -maxdepth 2 -type f -name SKILL.md \
-    -exec dirname {} \; | xargs -n1 basename | sort -u | grep -v experimental
+    -exec dirname {} \; | xargs -0 -n1 basename | sort -u | grep -v experimental
 )
 [ "${#local_skills[@]}" -gt 0 ] || die "no SKILL.md files found in: $LOCAL_SKILLS_DIR"
 

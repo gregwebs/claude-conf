@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 # Update an existing issue, authenticated as a GitHub App installation.
 #
-# Usage: gh-app-issue-update.sh --issue NUMBER [--repo OWNER/REPO]
+# Usage: gh-app-issue-update.sh --issue NUMBER
 #          [--title TITLE] [--body TEXT | --body-file FILE]
 #          [--state open|closed] [--label LABEL]... [--clear-labels]
 #
-# --repo defaults to the current directory's github.com origin remote.
 # At least one of --title, --body/--body-file, --state, --label, or
 # --clear-labels is required.
 # Passing --label replaces the issue's full label set with the provided labels.
 # Passing --clear-labels replaces the issue's full label set with an empty set.
-# Requires a GitHub App set up per the Setup reference in the /github-app skill.
-# (client-id, private-key.pem under ~/.config/github-app/, not tracked;
-# installation granted Issues:write on the repo).
+# Requires a GitHub App set up per the Setup reference in the /github-app skill
+# with installation granted Issues:write on the repo.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

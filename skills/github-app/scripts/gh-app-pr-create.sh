@@ -2,12 +2,10 @@
 # Open a pull request, authenticated as a GitHub App installation.
 #
 # Usage: gh-app-pr-create.sh --base BASE --head HEAD --title TITLE \
-#          [--repo OWNER/REPO] [--body TEXT | --body-file FILE] [--draft]
+#          [--body TEXT | --body-file FILE] [--draft]
 #
-# --repo defaults to the current directory's github.com origin remote.
-# Requires a GitHub App set up per the Setup reference in the /github-app skill.
-# (client-id, private-key.pem under ~/.config/github-app/, not tracked;
-# installation granted Contents:write + Pull requests:write on the repo).
+# Requires a GitHub App set up per the Setup reference in the /github-app skill
+# with installation granted Contents:write + Pull requests:write on the repo.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

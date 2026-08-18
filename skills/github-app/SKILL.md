@@ -1,6 +1,6 @@
 ---
 name: github-app
-description: Read and update GitHub issues, push branches, and create or update pull requests, issues, and comments through the App-authenticated ./scripts/gh-app.sh dispatcher. Use for GitHub reads or writes, including "open a PR", "send a pull request", "file/read/update an issue", "comment on the PR/issue", or an App-authenticated push.
+description: Read and update GitHub issues, push branches, and create or update pull requests, issues, and comments through the App-authenticated ./scripts/gh-app.sh dispatcher. Use for GitHub reads or writes, including "open a PR", "send a pull request", "file/read/update an issue", "comment on the PR/issue", "mark an issue as blocked by / blocking another", or an App-authenticated push.
 user-invocable: true
 allowed-tools:
   - Read
@@ -49,6 +49,9 @@ If the skill needs to be used, prompt the user to add these files.
 | Read an issue | `./scripts/gh-app.sh issue-get` | `--issue NUMBER` |
 | File an issue | `./scripts/gh-app.sh issue-create` | `--title TITLE` |
 | Link sub-issue | `./scripts/gh-app.sh issue-sub-add` | `--parent NUMBER --child NUMBER` |
+| Link blocked-by | `./scripts/gh-app.sh issue-block-add` | `--blocked NUMBER --blocker NUMBER` |
+| Remove blocked-by | `./scripts/gh-app.sh issue-block-remove` | `--blocked NUMBER --blocker NUMBER` |
+| List blocking edges | `./scripts/gh-app.sh issue-block-list` | `--issue NUMBER` |
 | Comment on issue/PR | `./scripts/gh-app.sh issue-comment` | `--issue NUMBER` (PRs count as issues here) |
 
 Common optional args: `--repo OWNER/REPO`, `--body TEXT`, `--body-file FILE`.
@@ -56,6 +59,27 @@ Issue creation also takes repeatable `--label LABEL`.
 
 `--repo` defaults to this directory's `github.com` origin remote — **omit it**
 unless acting on a different repo.
+
+## Recording blocked-by / blocking dependencies
+
+GitHub stores this as a single directed edge: "issue A blocks issue B" is
+recorded as "B is blocked_by A". There is no separate write for the "blocking"
+direction — pick the end that names the issue that **cannot start**:
+
+```
+./scripts/gh-app.sh issue-block-add --blocked 42 --blocker 40
+```
+
+reads as "issue 42 is blocked by issue 40". `issue-block-list --issue N` reads
+the edge from either end (`blocked by:` / `blocking:`), and
+`issue-get --issue N --format md` also shows both lines for that issue.
+
+To undo a link, pass the same `--blocked`/`--blocker` pair to
+`issue-block-remove`:
+
+```
+./scripts/gh-app.sh issue-block-remove --blocked 42 --blocker 40
+```
 
 ## Permission-efficient command shapes
 
@@ -154,3 +178,8 @@ and PR/issue number** work for both:
 - These scripts use `curl`/`jq` (not `gh`) on purpose: `gh` fails TLS against
   `api.github.com` in this sandbox. They automatically prefer the Homebrew curl
   required on this host. Don't add a `PATH` prefix or substitute `gh`.
+- **`404`/`415` from `issue-block-add`/`issue-block-remove`/`issue-block-list`** —
+  the pinned REST API version (`2022-11-28` in `lib.sh`) may not serve the
+  issue-dependencies endpoints. Retry with
+  `GH_APP_API_VERSION=2026-03-10 ./scripts/gh-app.sh ...`; if that fixes it,
+  update the default in `lib.sh` instead of setting the variable every call.
