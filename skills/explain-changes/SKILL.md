@@ -3,9 +3,9 @@ name: explain-changes
 description: "Explain changes in an educational way"
 ---
 
-Produce a single long-form page that teaches a reader how a specified code change works.
+Teach a reader how a specified code change works.
 
-Investigate the surrounding system before explaining the diff: the page should make sense to a beginner while still giving an experienced engineer a concise path to the changed behavior.
+Investigate the surrounding system before explaining the changes: the explanation should make sense to a beginner while still giving an experienced engineer a concise path to the changed behavior.
 
 ## Workflow
 
@@ -51,7 +51,7 @@ Diagrams must be displayable in Github markdown.
 
 For an HTML context:
 Use a small, reusable set of diagram patterns rather than ornamental graphics.
-Build diagrams with semantic HTML elements and CSS. Label arrows and include example values whenever the diagram describes data movement. Add accessible text or a caption so the explanation does not depend on visual inspection alone. Keep the page readable on phones with responsive CSS.
+Build diagrams with semantic HTML elements and CSS. Label arrows and include example values whenever the diagram describes data movement. Add accessible text or a caption so the explanation does not depend on visual inspection alone. Keep the explanation readable on phones with responsive CSS.
 
 ## Quiz quality rules
 
