@@ -20,8 +20,11 @@ Access Github if the capability is available and the user instructs it.
 
 ## Branching
 
-Discover the default branch; if you are on it, create a new branch.
-If you are on a non-default branch, check against the lastest origin default branch to see if it your current branch has already been merged. If it has, put the work in a new branch off of the tip of the default branch (updated from origin).
+Update the default branch to the latest from the origin.
+If you were already on the default branch, branch from there.
+Otherwise, check if the current branch has been merged into the updated default (could be a squash merge).
+If it has been merged, then branch off the updated default (move your changes there).
+Otherwise, branch off of the current branch. First ensure the updated default is merged into it.
 
 If you are working on a sub issue of a parent issue, then look for an active parent branch to use as the base.
 All sub issues that do not have dependencies should use the discovered default branch or the parent branch as their base branch.
