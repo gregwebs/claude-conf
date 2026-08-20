@@ -1,28 +1,30 @@
-AI configuration to produce high quality code.
+This repo accomplishes
+
+* Skills to orchestrate software changes through spec -> implement -> plan -> review -> verify
+* Applying consistent coding standards
 
 ## Goal
 
 * Increase Agent code quality (fewer defects, stronger code base)
-* Decrease user overview
+* Decrease user overview to planning and reviewing
 
 These are achieved by:
 * outlining a workflow that emphasizes specing, planning, testing, verification, and architecture/design
 * having a separate agent review at every stage
 
 Requirements from you
-* Deeply involved with the planning stage
+* Deeply involved with the speccing/planning stage
 * Spend effort on engineering discipline
 
 Downsides
 * It takes AI more time to complete its task
 * Higher cost to initially complete a feature
-  * For a non-prototype you will save costs due to
+  * For a sustained non-prototype code base you save costs due to
     * Fewer defects
-    * A more agile code base
+    * A more agile code base (future changes are less costly to make)
 
-As code quality increases, the agent can do more hands off work for you.
-This configuration pushes you towards a large investment in alignment via /grilling and then optional involvement after that point.
-If configured and allowed, the agent can send Pull Requests, and you can decide how closesly to review them.
+This configuration pushes you towards a large investment in alignment via /gril-with-docs and then mostly optional involvement after that point.
+If configured and allowed, the agent can send Pull Requests.
 
 ## Docs
 
