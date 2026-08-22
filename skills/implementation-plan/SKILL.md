@@ -78,7 +78,8 @@ Include a task checklist
 
 Include a Review notes section in the plan. Put the text "not reviewed" in this section when the plan is written out and not yet reviewed.
 
-Unless the change is trivial, Have an independent subagent perform an adversarial review of the plan. Review in this order and incorporate the findings into the plan:
+If the change is trivial, no review is needed. Put the text "trivial change, review not needed" in the review section.
+Otherwise, have an independent subagent perform an adversarial review of the plan. Review in this order and incorporate the findings into the plan:
 
 1. **Spec** — completeness and scope.
 2. **Architecture**
