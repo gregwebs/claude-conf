@@ -1,8 +1,3 @@
-This repo accomplishes
-
-* Skills to orchestrate software changes through spec -> implement -> plan -> review -> verify
-* Applying consistent coding standards
-
 ## Goal
 
 * Increase Agent code quality (fewer defects, stronger code base)
@@ -30,22 +25,13 @@ If configured and allowed, the agent can send Pull Requests.
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for how to test changes to this repo.
 
-See [docs/plans/](./docs/plans/) for implementation plans behind past changes to this repo.
-
-## CLAUDE.md vs AGENTS.md
-
-CLAUDE.md has @AGENTS.md at the top- that will include the contents of AGENTS.md into CLAUDE.md
-
 ## Implementation
 
-These files are designed to be generic with respect to programming language and project.
-The implementation is in the skills, which are designed to be generic.
+The implementation is in the skills.
+The skill files are designed to be generic with respect to programming language and project.
 You customize things for your repo by editing
-* AGENTS.md
-* README.md and other docs used by the agent, suggested:
-  * CODING_STANDARDS.md (for writing and reviewing code)
-  * CONTRIBUTING.md (for how to run and test the project)
-  * USAGE.md - if you have a public interface to document
+* AGENTS.md (or CLAUDE.md)
+* CODING_STANDARDS.md - for writing and reviewing code, this project has a generator
 
 ### Installing
 
@@ -62,54 +48,32 @@ repository's overrides and the referenced upstream dependencies with:
 ./scripts/install-skills.sh
 ```
 
-The installer audits every forward-slash skill command in the repository's
-documentation and skill files before creating links in `~/.agent/skills`. If a
-required upstream skill is missing, it stops without changing links; rerun with
-`--force` to install the Matt Pocock skills. When `~/.claude` exists, matching
-links are also installed in `~/.claude/skills`. Claude and Codex may use
-different skill-root symlinks, so the installer preserves those roots and
-only adds missing individual skill links. Run `./scripts/install-skills.sh
---help` for source and destination overrides.
+This script creates symlinks to this github repo.
+That makes it easy to upgrade by pulling the github repo.
+
+The installer ensures that the dependent Matt Pocock skills are already installed.
+When `~/.claude` exists, matching links are also installed in `~/.claude/skills`.
 
 Install the repository's agent definitions with:
 
 ```sh
-./scripts/install-agents.sh
+./scripts/install-agents.sh [--dry-run] [--force] [--help]
 ```
 
 This links `agents/*.md` into `~/.claude/agents` and `.codex/agents/*.toml`
 into `~/.codex/agents`. Both destination directories are created as needed;
-unrelated existing agents are preserved because each agent is linked
-individually. Existing conflicting entries are refused by default. Use
-`--force` to retain a timestamped adjacent backup before replacing a conflict,
-`--dry-run` to inspect planned changes, or `--help` for source and destination
-overrides.
+Overwriting is refused by default: use `--force` to overwrite with a timestamped adjacent backup.
 
 Generate a project's `CODING_STANDARDS.md` from this repository's
 [standards/](./standards) documents with:
 
 ```sh
-./scripts/install-standards.sh coding go security
+./scripts/install-standards.sh [--help] [--list] [--force] [standard...]
+# example
+./scripts/install-standards.sh bash coding go security > CODING_STANDARDS.md
 ```
 
-Positional arguments name which `standards/*.md` documents to compile and in
-which order (the `.md` suffix is optional); the result is written to stdout,
-so redirect it into your project, e.g. `> /path/to/project/CODING_STANDARDS.md`.
-Run with no arguments for an interactive prompt that lists the available
-standards and reads your selection. Pass `--output-dir DIR` to write
-`DIR/CODING_STANDARDS.md` directly — reruns are idempotent (a byte-identical
-result is left alone), a changed result is refused unless `--force` is given,
-in which case the previous file is kept as a timestamped backup. Use `--list`
-to print the available standards, or `--help` for all options.
-
-You can install these skills to your home directory (~/.agents/skills).
-However, to override those skills with ones from this repo with the same name (/grilling, /implement),
-you will need to install to a different location (I suggest cloning the repo).
-Then you can symlink from ~/.agents/skills to mattpocock skills and/or skills in this repo.
-
-Alternatively you can install/override skills in an individual project.
-
-The skils in this repo are in [.agents/skills](.agents/skills). /grilling is very experimental.
+Positional arguments name which `standards/*.md` documents to add to the standard and in which order.
 
 ## Workflow
 
@@ -133,7 +97,7 @@ Then implemented with
 
 * /implement
 
-This orcestrates planning, implementing, and reviewing. If you install the agents in this repo, it will switch between `implementer` and `planner`. The skill itself can be ran with a less capable model.
+This orcestrates planning, implementing, and reviewing. If you install the agents in this repo, it will use them to switch between opus for planning and review and Sonnet for implementation.
 
 ### Differences
 
